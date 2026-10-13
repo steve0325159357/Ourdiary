@@ -1,0 +1,2425 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6EFE2">
+<title>關於妳，關於我，關於我們</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=block" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+:root {
+  --bg: #F6EFE2;
+  --bg2: #EFE5D2;
+  --surface: #FFFBF3;
+  --ink: #4B3A2F;
+  --sub: #8A7766;
+  --faint: #B8A894;
+  --line: #E6D9C3;
+  --accent: #7FA88E;
+  --accent-d: #5F8A70;
+  --accent-l: #E3EDE3;
+  --honey: #E3B566;
+  --terra: #D9826B;
+  --rose: #C99BA6;
+  --sky: #8FB3C4;
+  --her: #D98C8C;
+  --me: #7FA88E;
+  --font: "LXGW WenKai TC", "Noto Sans TC", sans-serif;
+  --latin: "Caveat", "LXGW WenKai TC", cursive;
+  --r: 8px;
+  --shadow: 0 2px 0 rgba(75,58,47,.05), 0 10px 24px rgba(75,58,47,.09);
+  --shadow-l: 0 16px 40px rgba(75,58,47,.18);
+}
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+input, textarea, select { font: inherit; color: var(--ink); }
+.ms { font-family: 'Material Symbols Rounded'; font-weight: normal; font-style: normal; display: inline-block; line-height: 1; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; user-select: none; font-variation-settings: 'FILL' 0, 'wght' 450; }
+.ms.f { font-variation-settings: 'FILL' 1, 'wght' 450; }
+
+.paper { background-color: var(--bg); background-image: radial-gradient(rgba(75,58,47,.035) 1px, transparent 1px); background-size: 6px 6px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; padding: 0 18px; border-radius: 10px; font-weight: 700; font-size: 15px; transition: transform .12s, background .15s, box-shadow .15s; white-space: nowrap; }
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--accent); color: #fff; box-shadow: 0 3px 0 var(--accent-d); }
+.btn.primary:hover { background: var(--accent-d); }
+.btn.ghost { background: var(--surface); border: 1px solid var(--line); }
+.btn.ghost:hover { background: var(--bg); }
+.btn.dark { background: var(--ink); color: var(--surface); }
+.btn.danger { color: var(--terra); }
+.btn.sm { height: 34px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+.icon-btn { width: 44px; height: 44px; border-radius: 22px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 4px 12px rgba(75,58,47,.1); flex-shrink: 0; transition: transform .12s; }
+.icon-btn:active { transform: scale(.94); }
+.icon-btn.accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 0 12px; height: 34px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; white-space: nowrap; flex-shrink: 0; transition: all .15s; }
+.chip.on { color: #fff; border-color: transparent; }
+.chip.sm { height: 24px; padding: 0 8px; font-size: 12px; gap: 3px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; }
+.chips::-webkit-scrollbar { display: none; }
+.chips-wrap { position: relative; min-width: 0; }
+.chips-wrap > .chips { scroll-behavior: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; scroll-snap-type: x proximity; cursor: grab; user-select: none; }
+.chips-wrap > .chips > * { scroll-snap-align: start; }
+.chips-wrap > .chips.dragging { cursor: grabbing; scroll-snap-type: none; }
+.chips-wrap > .chips.dragging * { pointer-events: none; }
+.chips-wrap.fade-r > .chips { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent); }
+.chips-wrap.fade-l > .chips { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px); mask-image: linear-gradient(90deg, transparent, #000 44px); }
+.chips-wrap.fade-l.fade-r > .chips { -webkit-mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(90deg, transparent, #000 44px, #000 calc(100% - 44px), transparent); }
+.chips-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 2px 8px rgba(75,58,47,.16); display: grid; place-items: center; color: var(--ink); z-index: 2; transition: transform .15s; }
+.chips-arrow:active { transform: translateY(-50%) scale(.9); }
+.chips-arrow.l { left: -4px; }
+.chips-arrow.r { right: -4px; }
+@media (hover: none) { .chips-arrow { width: 24px; height: 24px; opacity: .92; } }
+
+.field { width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); padding: 0 12px; outline: none; font-size: 15px; }
+.field:focus, textarea.field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-l); }
+textarea.field { height: auto; min-height: 84px; padding: 10px 12px; line-height: 1.6; resize: vertical; }
+.label { font-size: 13px; color: var(--sub); margin: 0 0 6px; display: flex; align-items: center; gap: 4px; }
+.muted { color: var(--sub); }
+.hand { font-family: var(--latin); }
+.dashed { border-top: 1px dashed var(--line); }
+.scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.ph { background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--c, var(--line)) 38%, transparent) 0 7px, color-mix(in oklab, var(--c, var(--line)) 16%, transparent) 7px 14px), var(--surface); position: relative; overflow: hidden; }
+.ph .ph-l { position: absolute; left: 8px; bottom: 6px; font: 500 10px/1 "JetBrains Mono", ui-monospace, monospace; color: var(--sub); }
+.media-tile { position: relative; overflow: hidden; border-radius: 6px; background: var(--bg2); }
+.media-tile img, .media-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.play-badge { position: absolute; right: 6px; top: 6px; width: 24px; height: 24px; border-radius: 12px; background: rgba(40,30,20,.45); color: #fff; display: grid; place-items: center; }
+.tape { position: absolute; width: 64px; height: 18px; opacity: .78; pointer-events: none; -webkit-mask-image: linear-gradient(90deg, transparent 0 2px, #000 2px calc(100% - 2px), transparent 0); }
+
+/* 地圖與自訂標記 */
+.leaflet-container { font-family: var(--font); background: var(--bg2); }
+.map-theme .leaflet-tile-pane { filter: sepia(.18) saturate(.92) contrast(.98); }
+.leaflet-control-attribution { font-size: 9px !important; background: rgba(255,251,243,.75) !important; }
+.leaflet-control-zoom { display: none; }
+.us-pin { background: none !important; border: 0 !important; }
+.pin-wrap { display: flex; flex-direction: column; align-items: center; transform-origin: 50% 100%; transition: transform .2s cubic-bezier(.3,1.6,.5,1); filter: drop-shadow(0 3px 4px rgba(75,58,47,.28)); }
+.pin-wrap.active { transform: scale(1.3); z-index: 999; }
+.pin-wrap:hover { transform: scale(1.12); }
+.pin-ring { width: 46px; height: 46px; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 0 0 2.5px var(--c); }
+.pin-img { width: 100%; height: 100%; border-radius: 50%; background-size: cover; background-position: center; }
+.pin-img.empty { background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--c) 55%, white) 0 4px, color-mix(in oklab, var(--c) 28%, white) 4px 8px); display: grid; place-items: center; color: #fff; }
+.pin-tip { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 9px solid var(--c); margin-top: -1px; }
+.pin-count { position: absolute; top: -4px; right: -8px; background: var(--ink); color: #fff; font-size: 10px; line-height: 16px; padding: 0 5px; border-radius: 8px; font-weight: 700; }
+.pin-drop { animation: drop .45s cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes drop { from { transform: translateY(-24px) scale(.6); opacity: 0 } to { transform: none; opacity: 1 } }
+.me-dot { width: 18px; height: 18px; border-radius: 9px; background: #6C9BD2; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); position: relative; }
+.me-dot::before { content: ''; position: absolute; inset: -12px; border-radius: 50%; background: #6C9BD2; opacity: .25; animation: pulse 2s ease-out infinite; }
+@keyframes pulse { 0% { transform: scale(.5); opacity: .45 } 100% { transform: scale(1.6); opacity: 0 } }
+.new-pin { filter: drop-shadow(0 4px 6px rgba(75,58,47,.3)); animation: bob 1.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-4px); } }
+
+/* 外層結構與導航 */
+.app { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 64px; flex-shrink: 0; display: flex; align-items: center; gap: 20px; padding: 0 24px; background: var(--surface); border-bottom: 1px solid var(--line); z-index: 500; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; white-space: nowrap; }
+.brand .hand { font-size: 26px; color: var(--accent-d); font-weight: 700; }
+.tabs { display: flex; gap: 4px; }
+.tab { display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; border-radius: 999px; font-size: 14.5px; color: var(--sub); transition: all .15s; }
+.tab:hover { background: var(--bg); }
+.tab.on { background: var(--accent); color: #fff; font-weight: 700; }
+.day-badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; font-size: 12.5px; color: var(--sub); }
+.day-badge b { font-family: var(--latin); font-size: 20px; color: var(--ink); line-height: 1; }
+.main { flex: 1; min-height: 0; position: relative; display: flex; }
+
+.bottomnav { position: absolute; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); height: 64px; z-index: 600; display: flex; align-items: center; justify-content: space-around; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 10px 30px rgba(75,58,47,.14); }
+.bn { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 50px; color: var(--sub); font-size: 10.5px; }
+.bn.on { color: var(--accent-d); font-weight: 700; }
+.bn-add { width: 58px; height: 58px; margin-top: -28px; border-radius: 18px; background: var(--accent); color: #fff; display: grid; place-items: center; border: 4px solid var(--bg); box-shadow: 0 8px 18px rgba(95,138,112,.4); transform: rotate(-4deg); transition: transform .2s; }
+.bn-add:active { transform: rotate(-4deg) scale(.92); }
+
+/* 約會聯絡簿與微互動 */
+.nav-ic { position: relative; display: inline-grid; }
+.nav-bell { position: absolute; top: -7px; right: -10px; width: 17px; height: 17px; border-radius: 9px; background: var(--honey); color: #fff; display: grid; place-items: center; border: 2px solid var(--surface); box-shadow: 0 1px 3px rgba(75,58,47,.25); }
+.tab.on .nav-bell { border-color: var(--accent); }
+.nav-bell .ms, .bell { transform-origin: 50% 15%; animation: bellRing 6s ease-in-out 3.5s infinite; }
+@keyframes bellRing { 0%, 84%, 100% { transform: rotate(0); } 86% { transform: rotate(16deg); } 89% { transform: rotate(-13deg); } 92% { transform: rotate(9deg); } 95% { transform: rotate(-5deg); } 97% { transform: rotate(2deg); } }
+@media (prefers-reduced-motion: reduce) { .nav-bell .ms, .bell { animation: none; } }
+
+.whisper { position: fixed; z-index: 900; display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-l); animation: whisperIn .45s cubic-bezier(.3,1.4,.5,1); transition: opacity .35s, transform .35s; }
+.whisper.desk { top: 76px; right: 20px; width: 400px; }
+.whisper.mob { top: calc(10px + env(safe-area-inset-top)); left: 12px; right: 12px; }
+.whisper.out { opacity: 0; transform: translateY(-10px); }
+@keyframes whisperIn { from { opacity: 0; transform: translateY(-14px); } }
+
+.who-chip { display: inline-flex; align-items: center; color: #fff; font-weight: 700; padding: 2px 7px; border-radius: 8px; line-height: 1.3; white-space: nowrap; flex-shrink: 0; }
+.due-chip { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--bg2); color: var(--sub); white-space: nowrap; }
+.due-chip.soon { background: color-mix(in oklab, var(--honey) 26%, var(--surface)); color: #8C6420; font-weight: 700; }
+.due-chip.over { background: color-mix(in oklab, var(--terra) 14%, var(--surface)); color: #A65A45; }
+.new-tag { display: inline-block; font: 700 9.5px/1 "JetBrains Mono", monospace; letter-spacing: .06em; color: #fff; background: var(--terra); padding: 3px 5px; border-radius: 4px; vertical-align: 2px; transform: rotate(-3deg); }
+
+.date-block { width: 64px; flex-shrink: 0; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; align-self: flex-start; }
+.date-block .db-m { background: var(--her); color: #fff; font-size: 11.5px; font-weight: 700; padding: 3px 0; }
+.date-block .db-d { font-size: 32px; font-weight: 700; line-height: 1.05; padding-top: 4px; }
+.date-block .db-w { font-size: 11px; color: var(--sub); padding-bottom: 6px; }
+.date-block.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: 78px; color: var(--faint); font-size: 11px; border-style: dashed; }
+
+.proposal { display: flex; gap: 14px; padding: 14px; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+.proposal:hover { transform: translateY(-2px); }
+.rsvp { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.rsvp button { display: inline-flex; align-items: center; gap: 4px; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; transition: all .15s; }
+.rsvp button:hover { background: var(--bg); }
+.rsvp button.on.yes, .rsvp button.yes:hover { background: var(--her); color: #fff; border-color: var(--her); }
+.rsvp button.on.maybe { background: var(--honey); color: #fff; border-color: var(--honey); }
+.rsvp button.on.no { background: var(--faint); color: #fff; border-color: var(--faint); }
+.st-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; color: var(--sub); background: var(--bg2); padding: 5px 10px; border-radius: 999px; }
+.stamp { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: var(--her); border: 2px solid var(--her); padding: 3px 10px; border-radius: 6px; transform: rotate(-4deg); background: color-mix(in oklab, var(--her) 8%, var(--surface)); }
+
+.bsec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.bsec-head h2 { margin: 0; font-size: 20px; }
+.bsec-ic { width: 30px; height: 30px; border-radius: 9px; color: #fff; display: grid; place-items: center; transform: rotate(-4deg); }
+
+.quick-add { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 6px 0 10px; border-radius: 10px; border: 1px dashed var(--line); background: var(--bg); color: var(--faint); }
+.quick-add input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 14px; }
+.quick-add:focus-within { border-color: var(--accent); background: var(--surface); }
+
+.upcoming { position: relative; margin-bottom: 22px; padding: 12px 14px; border-radius: 10px; background: color-mix(in oklab, var(--honey) 14%, var(--surface)); border: 1px solid color-mix(in oklab, var(--honey) 40%, var(--line)); }
+.up-item { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; flex-shrink: 0; }
+.up-item b { color: #8C6420; font-size: 12px; white-space: nowrap; }
+
+.sticky-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 22px 16px; padding-top: 8px; }
+.sticky { position: relative; min-height: 150px; padding: 20px 14px 12px; border-radius: 2px 2px 16px 2px; box-shadow: 0 6px 14px rgba(75,58,47,.12); display: flex; flex-direction: column; gap: 10px; text-align: left; transition: transform .25s cubic-bezier(.3,1.5,.5,1), box-shadow .2s; }
+.sticky:hover { transform: rotate(0) scale(1.03) !important; box-shadow: 0 10px 22px rgba(75,58,47,.16); }
+.sticky-text { flex: 1; font-size: 15px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.sticky-add { background: transparent !important; border: 2px dashed var(--line); box-shadow: none; align-items: center; justify-content: center; color: var(--sub); font-size: 13.5px; text-align: center; }
+.sticky-add:hover { border-color: var(--accent); color: var(--accent-d); }
+
+.todo-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 2px; border-bottom: 1px dashed var(--line); }
+.todo-row:last-child { border-bottom: 0; }
+.check { width: 24px; height: 24px; flex-shrink: 0; border-radius: 7px; border: 2px solid var(--faint); background: var(--surface); display: grid; place-items: center; color: #fff; transition: all .2s cubic-bezier(.3,1.6,.5,1); }
+.check:hover { border-color: var(--accent); }
+.check.on { background: var(--accent); border-color: var(--accent); transform: rotate(-6deg) scale(1.05); }
+
+.quest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.quest { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); cursor: pointer; overflow: hidden; transition: transform .2s; min-height: 104px; }
+.quest:hover { transform: translateY(-2px); }
+.quest.done { background: color-mix(in oklab, var(--sky) 10%, var(--surface)); }
+.quest-ic { width: 30px; height: 30px; border-radius: 15px; background: color-mix(in oklab, var(--sky) 22%, var(--surface)); color: #5D8AA0; display: grid; place-items: center; flex-shrink: 0; }
+.quest-stamp { position: absolute; right: 8px; bottom: 8px; font-size: 11px; font-weight: 700; color: var(--terra); border: 1.5px solid var(--terra); border-radius: 5px; padding: 2px 6px; transform: rotate(-8deg); background: var(--surface); }
+.progress { height: 10px; border-radius: 5px; background: var(--bg2); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: 5px; background: repeating-linear-gradient(45deg, var(--accent) 0 8px, color-mix(in oklab, var(--accent) 80%, white) 8px 16px); transition: width .6s cubic-bezier(.3,1.2,.5,1); }
+
+.bubble { max-width: 80%; padding: 9px 13px; border-radius: 14px; font-size: 14.5px; line-height: 1.55; white-space: pre-wrap; }
+.bubble.mine { background: var(--accent-l); border-bottom-right-radius: 4px; }
+.bubble.theirs { background: color-mix(in oklab, var(--her) 16%, var(--surface)); border-bottom-left-radius: 4px; }
+
+/* 彈窗與浮層 */
+.scrim { position: fixed; inset: 0; background: rgba(60,45,35,.38); z-index: 1000; animation: fade .2s; }
+@keyframes fade { from { opacity: 0 } }
+.sheet { position: fixed; z-index: 1001; background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+.sheet.mobile { left: 0; right: 0; bottom: 0; top: 24px; border-radius: 20px 20px 0 0; animation: up .32s cubic-bezier(.2,.9,.3,1); }
+.sheet.desk { top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(760px, calc(100vw - 48px)); max-height: calc(100vh - 48px); border-radius: 14px; box-shadow: var(--shadow-l); animation: pop .25s cubic-bezier(.2,.9,.3,1); }
+.sheet.desk.wide { width: min(1040px, calc(100vw - 48px)); }
+@keyframes up { from { transform: translateY(100%) } }
+@keyframes pop { from { transform: translate(-50%, -46%); opacity: 0 } }
+.sheet-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--surface); flex-shrink: 0; }
+.sheet-head h3 { margin: 0; font-size: 18px; flex: 1; }
+.sheet-foot { display: flex; gap: 10px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--surface); flex-shrink: 0; }
+
+.toast { position: fixed; left: 50%; bottom: 100px; transform: translateX(-50%); z-index: 3000; background: var(--ink); color: var(--surface); padding: 10px 16px; border-radius: 10px; font-size: 14px; box-shadow: var(--shadow-l); animation: toastIn .3s cubic-bezier(.3,1.5,.5,1); display: flex; align-items: center; gap: 8px; max-width: calc(100vw - 32px); }
+@keyframes toastIn { from { transform: translate(-50%, 20px); opacity: 0 } }
+
+.seg { display: inline-flex; padding: 3px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; }
+.seg button { height: 32px; padding: 0 12px; border-radius: 999px; font-size: 13px; color: var(--sub); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.seg button.on { background: var(--ink); color: var(--surface); }
+
+.lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(30,22,16,.94); display: flex; align-items: center; justify-content: center; animation: fade .2s; }
+.lightbox img, .lightbox video { max-width: 92vw; max-height: 82vh; border-radius: 4px; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+
+.fade-in { animation: fadeUp .35s both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px) } }
+
+.results-pop { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 50; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-l); overflow: hidden; max-height: 320px; overflow-y: auto; }
+.result-row { display: flex; gap: 10px; padding: 10px 12px; align-items: flex-start; width: 100%; text-align: left; border-bottom: 1px dashed var(--line); }
+.result-row:hover { background: var(--bg); }
+.result-row:last-child { border-bottom: 0; }
+
+/* 開場載入畫面 */
+#splash { position: fixed; inset: 0; z-index: 9999; background: #F6EFE2; overflow: hidden; cursor: pointer; display: grid; place-items: center; transition: opacity .7s ease, transform .7s ease; }
+#splash.out { opacity: 0; transform: scale(1.03); pointer-events: none; }
+#splash .sp-bg-pic { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+#splash .sp-bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: 0; transform: scale(1.04); animation: spBgFade 1.2s cubic-bezier(.2,.7,.2,1) .05s forwards; }
+#splash .sp-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(246,239,226,.25) 0%, rgba(246,239,226,.06) 55%, rgba(246,239,226,.22) 100%); z-index: 1; pointer-events: none; }
+@keyframes spBgFade { to { opacity: 1; transform: scale(1); } }
+
+#splash .sp-text { position: relative; z-index: 2; text-align: center; font-family: "LXGW WenKai TC", "Noto Serif TC", serif; color: #4B3A2F; padding: 24px; margin-top: -2vh; text-shadow: 0 1px 10px rgba(255,251,243,.85); }
+#splash .sp-us { font-family: "Caveat", cursive; font-weight: 700; color: #5F8A70; font-size: clamp(26px, 3.2vw, 40px); line-height: 1; opacity: 0; transform: translateY(6px) rotate(-4deg); animation: spFade .6s ease .15s forwards; margin-bottom: clamp(10px, 1.6vw, 18px); }
+#splash .sp-line { display: block; font-weight: 700; line-height: 1.25; letter-spacing: .12em; white-space: nowrap; clip-path: inset(0 100% 0 0); animation: spWrite .7s cubic-bezier(.45,.05,.35,1) forwards; }
+#splash .sp-line.l1 { font-size: clamp(30px, 4vw, 54px); color: #C9757A; animation-delay: .35s; margin-left: -1.6em; }
+#splash .sp-line.l2 { font-size: clamp(30px, 4vw, 54px); color: #5F8A70; animation-delay: .85s; margin-left: 1.6em; }
+#splash .sp-line.l3 { font-size: clamp(42px, 5.8vw, 78px); color: #4B3A2F; animation-delay: 1.35s; margin-top: .12em; position: relative; }
+@keyframes spWrite { to { clip-path: inset(-20% -20% -20% 0); } }
+@keyframes spFade { to { opacity: 1; transform: none; } }
+
+#splash .sp-uline { display: block; margin: 2px auto 0; width: clamp(180px, 22vw, 300px); height: 14px; }
+#splash .sp-uline path { fill: none; stroke: #E3B566; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 320; stroke-dashoffset: 320; animation: spDraw .6s ease-out 1.95s forwards; }
+@keyframes spDraw { to { stroke-dashoffset: 0; } }
+#splash .sp-heart { position: absolute; right: -.55em; top: -.2em; font-size: .42em; color: #D98C8C; opacity: 0; transform: scale(0) rotate(-20deg); animation: spPop .5s cubic-bezier(.3,1.8,.5,1) 1.95s forwards; font-family: 'Material Symbols Rounded'; font-variation-settings: 'FILL' 1; line-height: 1; }
+@keyframes spPop { to { opacity: 1; transform: scale(1) rotate(-12deg); } }
+
+#splash .sp-days { margin-top: clamp(14px, 2vw, 22px); font-size: clamp(14px, 1.3vw, 17px); color: #8A7766; letter-spacing: .08em; opacity: 0; transform: translateY(6px); animation: spFade .6s ease 2.15s forwards; }
+#splash .sp-days b { font-family: "Caveat", cursive; font-size: 1.6em; color: #4B3A2F; margin: 0 .15em; letter-spacing: 0; }
+#splash .sp-skip { position: absolute; z-index: 2; bottom: max(18px, env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font: 12px/1 "LXGW WenKai TC", sans-serif; color: #8A7766; letter-spacing: .1em; opacity: 0; animation: spFade .5s ease 1.2s forwards; }
+
+@media (max-width: 899px) {
+  #splash .sp-text { margin-top: -6vh; }
+  #splash .sp-line.l1, #splash .sp-line.l2 { font-size: 34px; }
+  #splash .sp-line.l3 { font-size: 48px; }
+  #splash .sp-us { font-size: 28px; }
+  .desk-only { display: none !important; }
+}
+@media (min-width: 900px) {
+  .mob-only { display: none !important; }
+}
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script>
+const DEFAULT_GOOGLE_MAPS_KEY = "AIzaSy"+"BNTn66B0wV9qEnXjhU__bg0eWT_3e5EQU";
+
+(function () {
+  const LS = 'us-records-v2';
+  const LS_SET = 'us-settings-v1';
+  let db;
+
+  function openDB() {
+    return new Promise((res, rej) => {
+      if (db) return res(db);
+      const r = indexedDB.open('us-media', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('m');
+      r.onsuccess = () => { db = r.result; res(db); };
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function putMedia(id, blob) {
+    const d = await openDB();
+    return new Promise((res, rej) => {
+      const tx = d.transaction('m', 'readwrite');
+      tx.objectStore('m').put(blob, id);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function getMedia(id) {
+    const d = await openDB();
+    return new Promise((res) => {
+      const rq = d.transaction('m').objectStore('m').get(id);
+      rq.onsuccess = () => res(rq.result || null);
+      rq.onerror = () => res(null);
+    });
+  }
+  async function delMedia(id) {
+    const d = await openDB();
+    return new Promise((res) => {
+      const tx = d.transaction('m', 'readwrite');
+      tx.objectStore('m').delete(id);
+      tx.oncomplete = () => res();
+      tx.onerror = () => res();
+    });
+  }
+  const urlCache = {};
+  async function mediaUrl(id) {
+    if (urlCache[id]) return urlCache[id];
+    try {
+      const b = await getMedia(id);
+      if (!b) return null;
+      return (urlCache[id] = URL.createObjectURL(b));
+    } catch (e) { return null; }
+  }
+  function cacheUrl(id, url) { urlCache[id] = url; }
+
+  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+  function seed() {
+    const t = new Date();
+    const lastYear = new Date(t.getFullYear() - 1, t.getMonth(), t.getDate());
+    const P = (name, addr, lat, lng) => ({ name, addr, lat, lng });
+    const R = (o) => ({ id: uid(), kind: o.place ? 'place' : 'life', media: [], createdAt: Date.now(), ...o });
+    return [
+      R({ date: '2026-09-20', time: '15:42', title: '擎天崗看芒草', cat: '旅行', place: P('擎天崗', '台北市士林區竹子湖路1-20號', 25.1667, 121.5745), weather: 'sunny', mood: '開心', rating: 5, seedPhotos: 6, seedVideos: 1, her: '風好大但好開心，下次要帶野餐墊！', me: '妳在草原上跑的樣子，我會記很久。' }),
+      R({ date: '2026-08-28', time: '18:20', title: '大稻埕碼頭的夕陽', cat: '日常', place: P('大稻埕碼頭', '台北市大同區民生西路底', 25.0563, 121.5085), weather: 'partly_cloudy_day', mood: '平靜', rating: 4, seedPhotos: 4, seedVideos: 0, her: '晚霞是粉紅色的，像棉花糖。', me: '散步到腳痠，換來一整片天空。' }),
+      R({ date: '2026-08-08', time: '14:00', title: '一起捏了兩個歪歪的杯子', cat: '體驗', place: P('華山1914文創園區', '台北市中正區八德路一段1號', 25.0441, 121.5292), weather: 'sunny', mood: '心動', rating: 5, seedPhotos: 8, seedVideos: 2, her: '我的杯子比較圓！不接受反駁。', me: '燒好之後要拿來喝早餐的豆漿。' }),
+      R({ date: '2026-07-14', time: '19:30', title: '妳的生日晚餐', cat: '生日', place: P('屋頂餐酒館', '台北市信義區松壽路', 25.0360, 121.5670), weather: 'partly_cloudy_day', mood: '感動', rating: 5, seedPhotos: 12, seedVideos: 1, her: '謝謝你偷偷準備的蛋糕，我真的哭了。', me: '願望是什麼？說了就不靈，那我幫妳記著。' }),
+      R({ date: '2026-06-02', time: '21:10', title: '第一次一起組書櫃', cat: '居家日常', place: null, weather: 'rainy', mood: '開心', rating: 4, seedPhotos: 3, seedVideos: 0, her: '說明書看不懂，但我們沒有吵架！', me: '多了三顆螺絲，至今仍是謎。' }),
+      R({ date: '2026-05-20', time: '17:50', title: '在一起四週年', cat: '紀念日', place: P('淡水漁人碼頭', '新北市淡水區觀海路199號', 25.1832, 121.4105), weather: 'sunny', mood: '心動', rating: 5, seedPhotos: 15, seedVideos: 3, her: '四年了，還是很喜歡牽你的手。', me: '還想要很多很多個五月二十日。' }),
+      R({ date: '2026-04-11', time: '12:15', title: '巷口那碗牛肉麵', cat: '美食', place: P('永康街', '台北市大安區永康街', 25.0330, 121.5297), weather: 'cloud', mood: '開心', rating: 4, seedPhotos: 2, seedVideos: 0, her: '湯頭很濃，下次點小碗加麵。', me: '妳把牛肉夾給我，我把蔥夾給妳。' }),
+      R({ date: iso(lastYear), time: '16:05', title: '九份老街雨天散步', cat: '旅行', place: P('九份老街', '新北市瑞芳區基山街', 25.1092, 121.8443), weather: 'rainy', mood: '平靜', rating: 5, seedPhotos: 9, seedVideos: 1, her: '共撐一把傘，你的肩膀濕了一半。', me: '芋圓很燙，妳很可愛。' }),
+    ];
+  }
+
+  function load() {
+    try { const s = JSON.parse(localStorage.getItem(LS)); if (Array.isArray(s)) return s; } catch (e) {}
+    const s = seed(); save(s); return s;
+  }
+  function save(list) {
+    try { localStorage.setItem(LS, JSON.stringify(list)); } catch (e) { console.warn('save failed', e); }
+  }
+  function loadSettings() {
+    const d = { anniv: '2022-05-20', her: '妳', me: '我', googleMapsKey: '', whisper: true };
+    try { return { ...d, ...(JSON.parse(localStorage.getItem(LS_SET)) || {}) }; } catch (e) { return d; }
+  }
+  function saveSettings(s) { localStorage.setItem(LS_SET, JSON.stringify(s)); }
+  function reset() { localStorage.removeItem(LS); return load(); }
+
+  window.Store = { load, save, loadSettings, saveSettings, reset, putMedia, getMedia, delMedia, mediaUrl, cacheUrl, uid, iso };
+})();
+</script>
+</head>
+<body>
+
+<div id="splash" aria-label="關於妳，關於我，關於我們">
+  <picture class="sp-bg-pic">
+    <source media="(min-width: 900px)" srcset="Image/splash-desktop.jpg">
+    <img class="sp-bg-img" src="Image/splash-mobile.jpg" alt="" loading="eager" decoding="async" onerror="this.style.display='none'">
+  </picture>
+  <div class="sp-overlay"></div>
+  <div class="sp-text">
+    <div class="sp-us">us ♡</div>
+    <span class="sp-line l1">關於妳，</span>
+    <span class="sp-line l2">關於我，</span>
+    <span class="sp-line l3">關於我們<span class="sp-heart">favorite</span></span>
+    <svg class="sp-uline" viewBox="0 0 300 14" preserveAspectRatio="none"><path d="M6 9 C 70 3, 150 12, 220 6 S 285 5, 294 8"/></svg>
+    <div class="sp-days">在一起的第<b data-days>—</b>天</div>
+  </div>
+  <div class="sp-skip">輕點任意處進入</div>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('splash');
+  if (!el) return;
+  try {
+    var s = JSON.parse(localStorage.getItem('us-settings-v1') || '{}');
+    var a = (s.anniv || '2022-05-20').split('-').map(Number);
+    var t = new Date();
+    var days = Math.floor((new Date(t.getFullYear(), t.getMonth(), t.getDate()) - new Date(a[0], a[1] - 1, a[2])) / 86400000) + 1;
+    var d = el.querySelector('[data-days]'); if (d) d.textContent = days.toLocaleString('en-US');
+  } catch (e) {}
+  var MIN = 2600, start = Date.now(), loaded = document.readyState === 'complete', done = false;
+  function hide() {
+    if (done) return; done = true;
+    el.classList.add('out');
+    setTimeout(function () { el.parentNode && el.parentNode.removeChild(el); }, 750);
+  }
+  function maybe() { if (loaded) setTimeout(hide, Math.max(0, MIN - (Date.now() - start))); }
+  window.addEventListener('load', function () { loaded = true; maybe(); });
+  el.addEventListener('click', hide);
+  setTimeout(hide, 5000);
+  maybe();
+})();
+</script>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const CATS = {
+  紀念日: { icon: 'favorite', c: '#D98C8C' },
+  旅行: { icon: 'luggage', c: '#8FB3C4' },
+  美食: { icon: 'icecream', c: '#E3B566' },
+  吃飯: { icon: 'ramen_dining', c: '#D9826B' },
+  居家日常: { icon: 'cottage', c: '#A99BC4' },
+  生日: { icon: 'cake', c: '#E39BB0' },
+  日常: { icon: 'wb_twilight', c: '#7FA88E' },
+  體驗: { icon: 'palette', c: '#C4A27A' },
+};
+const catC = (c) => (CATS[c] || CATS['日常']).c;
+const catI = (c) => (CATS[c] || CATS['日常']).icon;
+
+const WEATHERS = [
+  ['sunny', '晴天'], ['partly_cloudy_day', '多雲'], ['cloud', '陰天'], ['rainy', '下雨'], ['thunderstorm', '雷雨'], ['ac_unit', '好冷'],
+];
+const WEATHER_MAP = Object.fromEntries(WEATHERS);
+const MOODS = [
+  ['開心', 'sentiment_very_satisfied', '#E3B566'], ['心動', 'favorite', '#D98C8C'], ['平靜', 'spa', '#7FA88E'],
+  ['感動', 'water_drop', '#8FB3C4'], ['累累', 'bedtime', '#A99BC4'], ['小生氣', 'mood_bad', '#D9826B'],
+];
+const MOOD_MAP = Object.fromEntries(MOODS.map(m => [m[0], m]));
+const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
+const pad2 = (n) => String(n).padStart(2, '0');
+const parseD = (iso) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+const fmt = (iso) => { const [y, m, d] = iso.split('-'); return { y, m: +m, d: +d, md: `${+m}.${+d}`, full: `${y}.${m}.${d}`, wk: WEEK[parseD(iso).getDay()] }; };
+const dayNoOf = (iso, anniv) => Math.floor((parseD(iso) - parseD(anniv)) / 86400000) + 1;
+const nf = (n) => n.toLocaleString('en-US');
+const sortRecs = (list) => [...list].sort((a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || '')));
+
+function Ms({ n, s = 20, f, style, className = '' }) {
+  return <span className={'ms ' + (f ? 'f ' : '') + className} style={{ fontSize: s, ...style }}>{n}</span>;
+}
+
+function useIsDesk() {
+  const q = '(min-width: 900px)';
+  const [v, setV] = React.useState(() => window.matchMedia(q).matches);
+  React.useEffect(() => { const m = window.matchMedia(q); const h = () => setV(m.matches); m.addEventListener('change', h); return () => m.removeEventListener('change', h); }, []);
+  return v;
+}
+
+function useMediaUrl(id) {
+  const [url, setUrl] = React.useState(null);
+  React.useEffect(() => { let on = true; if (id) Store.mediaUrl(id).then(u => on && setUrl(u)); return () => { on = false; }; }, [id]);
+  return url;
+}
+
+function MediaTile({ m, rec, label, style, onClick, cover = true, idx = 0 }) {
+  const url = useMediaUrl(m && m.id);
+  const c = rec ? catC(rec.cat) : 'var(--line)';
+  const base = { ...style, cursor: onClick ? 'pointer' : 'default' };
+  if (!m) return <div className="media-tile ph" style={{ '--c': c, ...base }} onClick={onClick}>{label && <span className="ph-l">{label}</span>}</div>;
+  if (m.seed) {
+    return (
+      <div className="media-tile ph" style={{ '--c': c, ...base }} onClick={onClick}>
+        <span className="ph-l">{m.type === 'video' ? '影片' : '照片'} {idx + 1}</span>
+        {m.type === 'video' && <span className="play-badge"><Ms n="play_arrow" s={16} f /></span>}
+      </div>
+    );
+  }
+  return (
+    <div className="media-tile" style={base} onClick={onClick}>
+      {m.type === 'video'
+        ? (m.thumb ? <img src={m.thumb} alt="" /> : url ? <video src={url} muted playsInline preload="metadata" /> : null)
+        : <img src={m.thumb && !cover ? m.thumb : (url || m.thumb)} alt="" />}
+      {m.type === 'video' && <span className="play-badge"><Ms n="play_arrow" s={16} f /></span>}
+      {label && <span className="ph-l" style={{ color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,.6)' }}>{label}</span>}
+    </div>
+  );
+}
+
+function recMedia(r) {
+  if (r.media && r.media.length) return r.media;
+  const out = [];
+  for (let i = 0; i < (r.seedPhotos || 0); i++) out.push({ id: r.id + 'p' + i, type: 'image', seed: true });
+  for (let i = 0; i < (r.seedVideos || 0); i++) out.splice(1 + i * 2, 0, { id: r.id + 'v' + i, type: 'video', seed: true });
+  return out;
+}
+const mediaCount = (r) => { const m = recMedia(r); return { p: m.filter(x => x.type === 'image').length, v: m.filter(x => x.type === 'video').length }; };
+const firstThumb = (r) => { const m = (r.media || []).find(x => x.thumb); return m ? m.thumb : null; };
+
+function Hearts({ n, s = 14, onChange }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: onChange ? 4 : 1, color: 'var(--terra)' }}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} onClick={onChange ? () => onChange(i) : undefined} style={{ cursor: onChange ? 'pointer' : 'default', opacity: i <= n ? 1 : .3, transition: 'transform .15s', display: 'inline-flex' }}>
+          <Ms n="favorite" s={s} f={i <= n} />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function CatChip({ cat, on, sm, onClick }) {
+  const c = catC(cat);
+  const Tag = onClick ? 'button' : 'span';
+  return (
+    <Tag className={'chip' + (on ? ' on' : '') + (sm ? ' sm' : '')} onClick={onClick} style={on ? { background: c } : {}}>
+      <Ms n={catI(cat)} s={sm ? 13 : 16} f style={{ color: on ? '#fff' : c }} />{cat}
+    </Tag>
+  );
+}
+
+function ScrollChips({ children, style, gap }) {
+  const ref = React.useRef(null);
+  const [edge, setEdge] = React.useState({ l: false, r: false });
+  const drag = React.useRef(null);
+  const update = React.useCallback(() => {
+    const el = ref.current; if (!el) return;
+    const l = el.scrollLeft > 2;
+    const r = el.scrollLeft + el.clientWidth < el.scrollWidth - 2;
+    setEdge(prev => (prev.l !== l || prev.r !== r) ? { l, r } : prev);
+  }, []);
+  React.useEffect(() => {
+    const el = ref.current; if (!el) return;
+    update();
+    const ro = new ResizeObserver(update); ro.observe(el);
+    const onWheel = (e) => {
+      if (el.scrollWidth <= el.clientWidth) return;
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); el.scrollLeft += e.deltaY; }
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => { ro.disconnect(); el.removeEventListener('wheel', onWheel); };
+  }, [update]);
+  const by = (d) => { const el = ref.current; el.scrollBy({ left: d * Math.max(160, el.clientWidth * 0.7), behavior: 'smooth' }); };
+  const down = (e) => { if (e.pointerType !== 'mouse') return; drag.current = { x: e.clientX, s: ref.current.scrollLeft, moved: false }; };
+  const move = (e) => {
+    const d = drag.current; if (!d) return;
+    const dx = e.clientX - d.x;
+    if (Math.abs(dx) > 4) { d.moved = true; ref.current.classList.add('dragging'); }
+    if (d.moved) ref.current.scrollLeft = d.s - dx;
+  };
+  const up = () => { const d = drag.current; drag.current = null; if (ref.current) ref.current.classList.remove('dragging'); };
+  return (
+    <div className={'chips-wrap' + (edge.l ? ' fade-l' : '') + (edge.r ? ' fade-r' : '')} style={style}>
+      <div ref={ref} className="chips" style={gap ? { gap } : undefined} onScroll={update}
+        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerLeave={up}>
+        {children}
+      </div>
+      {edge.l && <button className="chips-arrow l" onClick={() => by(-1)}><Ms n="chevron_left" s={20} /></button>}
+      {edge.r && <button className="chips-arrow r" onClick={() => by(1)}><Ms n="chevron_right" s={20} /></button>}
+    </div>
+  );
+}
+
+function CatFilter({ value, onChange }) {
+  return (
+    <ScrollChips>
+      <button className={'chip' + (!value ? ' on' : '')} style={!value ? { background: 'var(--ink)' } : {}} onClick={() => onChange(null)}>全部</button>
+      {Object.keys(CATS).map(c => <CatChip key={c} cat={c} on={value === c} onClick={() => onChange(value === c ? null : c)} />)}
+    </ScrollChips>
+  );
+}
+
+function MetaLine({ r, s = 12.5 }) {
+  const mood = MOOD_MAP[r.mood];
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: s, color: 'var(--sub)', flexWrap: 'wrap' }}>
+      {r.weather && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Ms n={r.weather} s={s + 4} />{WEATHER_MAP[r.weather]}{r.temp != null ? ` ${r.temp}°` : ''}</span>}
+      {mood && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Ms n={mood[1]} s={s + 4} f style={{ color: mood[2] }} />{mood[0]}</span>}
+      {r.rating ? <Hearts n={r.rating} s={s + 1} /> : null}
+    </div>
+  );
+}
+
+function Voice({ who, text, color, s = 14, clamp }) {
+  if (!text) return null;
+  return (
+    <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+      <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: '#fff', background: color, borderRadius: 10, padding: '3px 7px', marginTop: 2 }}>{who}</span>
+      <span style={{ fontSize: s, lineHeight: 1.6, textWrap: 'pretty', ...(clamp ? { display: '-webkit-box', WebkitLineClamp: clamp, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}) }}>{text}</span>
+    </div>
+  );
+}
+
+function Tape({ color = 'var(--honey)', style }) { return <div className="tape" style={{ background: color, ...style }} />; }
+
+const ToastCtx = React.createContext(() => {});
+function ToastHost({ children }) {
+  const [msg, setMsg] = React.useState(null);
+  const show = React.useCallback((text, icon = 'favorite') => { setMsg({ text, icon, k: Date.now() }); clearTimeout(window.__tt); window.__tt = setTimeout(() => setMsg(null), 2400); }, []);
+  return (
+    <ToastCtx.Provider value={show}>
+      {children}
+      {msg && <div className="toast" key={msg.k}><Ms n={msg.icon} s={18} f style={{ color: 'var(--honey)' }} />{msg.text}</div>}
+    </ToastCtx.Provider>
+  );
+}
+const useToast = () => React.useContext(ToastCtx);
+
+function Sheet({ title, onClose, children, foot, wide, headExtra }) {
+  const desk = useIsDesk();
+  React.useEffect(() => { const h = (e) => e.key === 'Escape' && onClose(); window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h); }, [onClose]);
+  return ReactDOM.createPortal(
+    <>
+      <div className="scrim" onClick={onClose} />
+      <div className={'sheet ' + (desk ? 'desk' : 'mobile') + (wide ? ' wide' : '')}>
+        <div className="sheet-head">
+          <button className="icon-btn" style={{ width: 36, height: 36, boxShadow: 'none' }} onClick={onClose}><Ms n={desk ? 'close' : 'expand_more'} s={22} /></button>
+          <h3>{title}</h3>
+          {headExtra}
+        </div>
+        <div className="scroll" style={{ flex: 1, minHeight: 0 }}>{children}</div>
+        {foot && <div className="sheet-foot">{foot}</div>}
+      </div>
+    </>, document.body);
+}
+
+const TILES = {
+  theme: {
+    url: 'https://wmts.nlsc.gov.tw/wmts/EMAP/default/GoogleMapsCompatible/{z}/{y}/{x}',
+    attr: '&copy; 內政部國土測繪中心 (通用版電子地圖)',
+    sub: [],
+    maxZoom: 20
+  },
+  street: {
+    url: 'https://{s}.google.com/vt/lyrs=m&hl=zh-TW&x={x}&y={y}&z={z}',
+    attr: '&copy; Google Maps',
+    sub: ['mt0', 'mt1', 'mt2', 'mt3'],
+    maxZoom: 20
+  },
+};
+
+function getEffectiveGoogleMapsKey() {
+  if (typeof DEFAULT_GOOGLE_MAPS_KEY === 'string' && DEFAULT_GOOGLE_MAPS_KEY.trim()) return DEFAULT_GOOGLE_MAPS_KEY.trim();
+  const s = Store.loadSettings();
+  return (s.googleMapsKey && s.googleMapsKey.trim()) ? s.googleMapsKey.trim() : '';
+}
+
+let googleMapsPromise = null;
+function loadGoogleMapsApi(apiKey) {
+  if (window.google && window.google.maps && window.google.maps.places) return Promise.resolve(window.google.maps);
+  if (!apiKey) return Promise.reject(new Error('未設定 Google Maps API Key'));
+  if (googleMapsPromise) return googleMapsPromise;
+  googleMapsPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&language=zh-TW&region=TW`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve(window.google.maps);
+    script.onerror = () => { googleMapsPromise = null; reject(new Error('無法載入 Google Maps API')); };
+    document.head.appendChild(script);
+  });
+  return googleMapsPromise;
+}
+
+const Geo = {
+  async searchWithGoogle(q, apiKey) {
+    await loadGoogleMapsApi(apiKey);
+    return new Promise((resolve) => {
+      const dummyDiv = document.createElement('div');
+      const service = new window.google.maps.places.PlacesService(dummyDiv);
+      service.textSearch({ query: q, language: 'zh-TW', location: new window.google.maps.LatLng(25.04, 121.55), radius: 50000 }, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && results && results.length) {
+          resolve(results.slice(0, 8).map(p => ({
+            name: p.name,
+            addr: p.formatted_address || '',
+            lat: p.geometry.location.lat(),
+            lng: p.geometry.location.lng(),
+            rating: p.rating,
+            source: 'google'
+          })));
+        } else resolve([]);
+      });
+    });
+  },
+  async searchWithFallback(q) {
+    try {
+      const u = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&lang=default&limit=8&lat=25.04&lon=121.55`;
+      const r = await fetch(u);
+      const j = await r.json();
+      return (j.features || []).map(f => {
+        const p = f.properties || {};
+        const coords = f.geometry.coordinates;
+        const addrParts = [p.country, p.city || p.county, p.district, p.street, p.housenumber ? p.housenumber + '號' : ''].filter(Boolean);
+        return { name: p.name || addrParts[addrParts.length - 1] || q, addr: addrParts.join('') || p.city || '', lat: coords[1], lng: coords[0], source: 'osm' };
+      });
+    } catch (e) { return []; }
+  },
+  async search(q) {
+    const key = getEffectiveGoogleMapsKey();
+    if (key) {
+      try {
+        const res = await this.searchWithGoogle(q, key);
+        if (res && res.length) return res;
+      } catch (err) {}
+    }
+    return this.searchWithFallback(q);
+  },
+  async reverse(lat, lng) {
+    const key = getEffectiveGoogleMapsKey();
+    if (key) {
+      try {
+        await loadGoogleMapsApi(key);
+        return new Promise((resolve) => {
+          new window.google.maps.Geocoder().geocode({ location: { lat, lng }, language: 'zh-TW' }, (results, status) => {
+            if (status === 'OK' && results && results[0]) {
+              resolve({ name: results[0].address_components[0] ? results[0].address_components[0].long_name : '目前位置', addr: results[0].formatted_address || '', source: 'google' });
+            } else resolve({ name: '目前位置', addr: '' });
+          });
+        });
+      } catch (e) {}
+    }
+    return { name: '目前位置', addr: '' };
+  },
+  locate() {
+    return new Promise((res, rej) => {
+      if (!navigator.geolocation) return rej(new Error('不支援定位'));
+      navigator.geolocation.getCurrentPosition(p => res({ lat: p.coords.latitude, lng: p.coords.longitude, acc: p.coords.accuracy }), e => rej(e), { enableHighAccuracy: true, timeout: 10000 });
+    });
+  }
+};
+
+function pinHtml(r, active) {
+  const c = catC(r.cat);
+  const th = firstThumb(r);
+  const n = recMedia(r).length;
+  return `<div class="pin-wrap pin-drop ${active ? 'active' : ''}" style="--c:${c}">
+    <div style="position:relative"><div class="pin-ring"><div class="pin-img ${th ? '' : 'empty'}" style="${th ? `background-image:url(${th})` : ''}">${th ? '' : `<span class="ms f" style="font-size:20px">${catI(r.cat)}</span>`}</div></div>
+    ${n > 1 ? `<span class="pin-count">${n}</span>` : ''}</div>
+    <div class="pin-tip"></div></div>`;
+}
+
+function UsMap({ records, activeId, onPick, base = 'theme', flyTo, me, draft, onDraftMove, onMapClick, onBoundsChange, padBottom = 0, padLeft = 0 }) {
+  const el = React.useRef(null);
+  const map = React.useRef(null);
+  const tiles = React.useRef(null);
+  const layer = React.useRef(null);
+  const meM = React.useRef(null);
+  const draftM = React.useRef(null);
+  const cb = React.useRef({}); cb.current = { onPick, onDraftMove, onMapClick, onBoundsChange };
+
+  React.useEffect(() => {
+    const m = L.map(el.current, { zoomControl: false, attributionControl: true, center: [25.07, 121.56], zoom: 11 });
+    map.current = m;
+    layer.current = L.layerGroup().addTo(m);
+    m.on('click', (e) => cb.current.onMapClick && cb.current.onMapClick(e.latlng));
+    const bc = () => cb.current.onBoundsChange && cb.current.onBoundsChange(m.getBounds());
+    m.on('moveend', bc);
+    setTimeout(() => { m.invalidateSize(); bc(); }, 50);
+    const ro = new ResizeObserver(() => m.invalidateSize()); ro.observe(el.current);
+    window.__usMap = m;
+    return () => { ro.disconnect(); m.remove(); };
+  }, []);
+
+  React.useEffect(() => {
+    const t = TILES[base] || TILES.theme;
+    if (tiles.current) tiles.current.remove();
+    tiles.current = L.tileLayer(t.url, { attribution: t.attr, subdomains: t.sub && t.sub.length ? t.sub : 'abc', maxZoom: 20 }).addTo(map.current);
+    el.current.classList.toggle('map-theme', base === 'theme');
+  }, [base]);
+
+  React.useEffect(() => {
+    const g = layer.current; g.clearLayers();
+    records.filter(r => r.place).forEach(r => {
+      const icon = L.divIcon({ className: 'us-pin', html: pinHtml(r, r.id === activeId), iconSize: [52, 62], iconAnchor: [26, 60] });
+      const mk = L.marker([r.place.lat, r.place.lng], { icon, zIndexOffset: r.id === activeId ? 1000 : 0 });
+      mk.on('click', (e) => { L.DomEvent.stopPropagation(e); cb.current.onPick && cb.current.onPick(r.id); });
+      g.addLayer(mk);
+    });
+  }, [records, activeId]);
+
+  React.useEffect(() => {
+    if (!flyTo) return;
+    const m = map.current;
+    const z = flyTo.zoom || Math.max(m.getZoom(), 15);
+    const p = m.project([flyTo.lat, flyTo.lng], z).add([-padLeft / 2, padBottom / 2]);
+    m.flyTo(m.unproject(p, z), z, { duration: .8 });
+  }, [flyTo, padBottom, padLeft]);
+
+  React.useEffect(() => {
+    if (!me) { if (meM.current) { meM.current.remove(); meM.current = null; } return; }
+    const icon = L.divIcon({ className: 'us-pin', html: '<div class="me-dot"></div>', iconSize: [18, 18], iconAnchor: [9, 9] });
+    if (!meM.current) meM.current = L.marker([me.lat, me.lng], { icon, interactive: false }).addTo(map.current);
+    else meM.current.setLatLng([me.lat, me.lng]);
+  }, [me]);
+
+  React.useEffect(() => {
+    if (!draft) { if (draftM.current) { draftM.current.remove(); draftM.current = null; } return; }
+    const html = `<div class="new-pin" style="--c:var(--accent)"><div class="pin-wrap" style="--c:var(--accent)"><div class="pin-ring"><div class="pin-img empty"><span class="ms f" style="font-size:22px">favorite</span></div></div><div class="pin-tip"></div></div></div>`;
+    const icon = L.divIcon({ className: 'us-pin', html, iconSize: [52, 62], iconAnchor: [26, 60] });
+    if (!draftM.current) {
+      draftM.current = L.marker([draft.lat, draft.lng], { icon, draggable: true, zIndexOffset: 2000 }).addTo(map.current);
+      draftM.current.on('dragend', (e) => cb.current.onDraftMove && cb.current.onDraftMove(e.target.getLatLng()));
+    } else draftM.current.setLatLng([draft.lat, draft.lng]);
+  }, [draft]);
+
+  return <div ref={el} style={{ position: 'absolute', inset: 0 }} />;
+}
+
+function PlaceSearch({ onSelect, onRecord, records = [], placeholder = '搜尋店名、地址或地標…', compact, autoFocus }) {
+  const [q, setQ] = React.useState('');
+  const [res, setRes] = React.useState(null);
+  const [busy, setBusy] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const wrap = React.useRef(null);
+
+  React.useEffect(() => {
+    const h = (e) => { if (wrap.current && !wrap.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('pointerdown', h);
+    return () => document.removeEventListener('pointerdown', h);
+  }, []);
+
+  const mine = q.trim() && onRecord ? records.filter(r => (r.title + (r.place ? r.place.name + r.place.addr : '') + (r.her || '') + (r.me || '')).includes(q.trim())).slice(0, 4) : [];
+
+  const run = async () => {
+    if (!q.trim()) return;
+    setBusy(true); setOpen(true);
+    const results = await Geo.search(q.trim());
+    setRes(results);
+    setBusy(false);
+  };
+
+  return (
+    <div ref={wrap} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+      <form onSubmit={(e) => { e.preventDefault(); run(); }} style={{ display: 'flex', alignItems: 'center', gap: 8, height: compact ? 42 : 46, padding: '0 6px 0 14px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 12, boxShadow: '0 4px 14px rgba(75,58,47,.07)' }}>
+        <Ms n="search" s={20} style={{ color: 'var(--sub)' }} />
+        <input value={q} autoFocus={autoFocus} onChange={(e) => { setQ(e.target.value); setOpen(true); if (!e.target.value) setRes(null); }} onFocus={() => setOpen(true)} placeholder={placeholder} style={{ flex: 1, minWidth: 0, border: 0, outline: 0, background: 'none', fontSize: 14 }} />
+        {q && <button type="button" onClick={() => { setQ(''); setRes(null); }} style={{ color: 'var(--faint)' }}><Ms n="cancel" s={18} f /></button>}
+        <button type="submit" className="btn primary sm" style={{ height: 32, boxShadow: 'none' }}>{busy ? '…' : '搜尋'}</button>
+      </form>
+      {open && (mine.length > 0 || res) && (
+        <div className="results-pop fade-in">
+          {mine.length > 0 && <div style={{ padding: '8px 12px 2px', fontSize: 12, color: 'var(--sub)' }}>我們的回憶</div>}
+          {mine.map(r => (
+            <button key={r.id} className="result-row" onClick={() => { setOpen(false); onRecord(r); }}>
+              <Ms n={catI(r.cat)} s={20} f style={{ color: catC(r.cat), marginTop: 2 }} />
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>{r.title}</div>
+                <div className="muted ellipsis" style={{ fontSize: 12 }}>{fmt(r.date).full}・{r.place ? r.place.name : '生活紀錄'}</div>
+              </div>
+            </button>
+          ))}
+          {res && <div style={{ padding: '8px 12px 2px', fontSize: 12, color: 'var(--sub)' }}>{busy ? '搜尋中…' : res.length ? '地點搜尋結果' : '找不到這個地點'}</div>}
+          {res && res.map((p, i) => (
+            <button key={i} className="result-row" onClick={() => { setOpen(false); setQ(p.name); onSelect(p); }}>
+              <Ms n="location_on" s={20} f style={{ color: 'var(--terra)', marginTop: 2 }} />
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>{p.name} {p.rating && <span style={{ color: '#E3B566' }}>★ {p.rating}</span>}</div>
+                <div className="muted ellipsis" style={{ fontSize: 12 }}>{p.addr}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function makeThumb(file, size = 160) {
+  return new Promise((res) => {
+    const draw = (src, w, h) => {
+      const c = document.createElement('canvas'); const s = Math.min(w, h);
+      c.width = c.height = size;
+      c.getContext('2d').drawImage(src, (w - s) / 2, (h - s) / 2, s, s, 0, 0, size, size);
+      try { res(c.toDataURL('image/jpeg', .72)); } catch (e) { res(null); }
+    };
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith('video')) {
+      const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+      v.onloadeddata = () => { v.currentTime = Math.min(.5, (v.duration || 1) / 3); };
+      v.onseeked = () => draw(v, v.videoWidth, v.videoHeight);
+      v.onerror = () => res(null);
+      setTimeout(() => res(null), 6000);
+    } else {
+      const i = new Image(); i.onload = () => draw(i, i.naturalWidth, i.naturalHeight); i.onerror = () => res(null); i.src = url;
+    }
+  });
+}
+
+const nowParts = () => { const d = new Date(); return { date: Store.iso(d), time: `${pad2(d.getHours())}:${pad2(d.getMinutes())}` }; };
+
+function Editor({ initial, presetPlace, presetKind, onSave, onDelete, onClose, settings }) {
+  const isEdit = !!(initial && initial.id);
+  const [r, setR] = React.useState(() => initial ? { ...initial, media: initial.media ? [...initial.media] : [] } : {
+    kind: presetKind || (presetPlace ? 'place' : 'place'), ...nowParts(), title: '', cat: presetKind === 'life' ? '居家日常' : '日常', place: presetPlace || null,
+    weather: 'sunny', temp: '', mood: '開心', rating: 4, her: '', me: '', media: [],
+  });
+  const [locBusy, setLocBusy] = React.useState(false);
+  const [uploading, setUploading] = React.useState(0);
+  const fileRef = React.useRef(null);
+  const toast = useToast();
+  const set = (k, v) => setR(o => ({ ...o, [k]: v }));
+
+  const locate = async () => {
+    setLocBusy(true);
+    try {
+      const p = await Geo.locate();
+      const info = await Geo.reverse(p.lat, p.lng);
+      set('place', { ...info, lat: p.lat, lng: p.lng, acc: p.acc });
+      toast(`已定位（誤差約 ${Math.round(p.acc)} 公尺）`, 'my_location');
+    } catch (e) { toast(e.code === 1 ? '請允許瀏覽器存取位置' : '定位失敗，可改用搜尋', 'location_off'); }
+    setLocBusy(false);
+  };
+
+  const addFiles = async (files) => {
+    const list = [...files].filter(f => /^(image|video)\//.test(f.type));
+    if (!list.length) return;
+    setUploading(n => n + list.length);
+    for (const f of list) {
+      const id = Store.uid();
+      const thumb = await makeThumb(f);
+      try { await Store.putMedia(id, f); } catch (e) { toast('儲存空間不足', 'error'); }
+      const url = URL.createObjectURL(f); Store.cacheUrl(id, url);
+      setR(o => ({ ...o, media: [...o.media.filter(m => !m.seed), { id, type: f.type.startsWith('video') ? 'video' : 'image', thumb, name: f.name }] }));
+      setUploading(n => n - 1);
+    }
+  };
+  const removeMedia = (id) => setR(o => ({ ...o, media: o.media.filter(m => m.id !== id) }));
+
+  const valid = r.title.trim() && (r.kind === 'life' || r.place);
+  const save = () => {
+    if (!valid) { toast(r.title.trim() ? '請先選擇地點，或改成「生活紀錄」' : '幫這段回憶取個標題吧', 'edit'); return; }
+    const out = { ...r, temp: r.temp === '' ? null : +r.temp, place: r.kind === 'life' ? null : r.place };
+    if (out.media.length) { delete out.seedPhotos; delete out.seedVideos; }
+    onSave(out);
+  };
+
+  const shown = r.media.length ? r.media : recMedia(r);
+  const sec = { padding: '16px 16px 4px' };
+
+  return (
+    <Sheet title={isEdit ? '編輯回憶' : (r.kind === 'life' ? '新增生活紀錄' : '新增打卡')} onClose={onClose}
+      headExtra={isEdit && <button className="btn danger sm" onClick={() => { if (confirm('確定要刪除這則回憶嗎？')) onDelete(r.id); }}><Ms n="delete" s={18} />刪除</button>}
+      foot={<><button className="btn ghost" onClick={onClose} style={{ flex: 1 }}>取消</button><button className="btn primary" onClick={save} style={{ flex: 2 }}><Ms n="favorite" s={18} f />{isEdit ? '儲存修改' : '收進回憶裡'}</button></>}>
+      <div style={{ padding: '14px 16px 0', display: 'flex', gap: 8 }}>
+        {[['place', 'location_on', '有地點的打卡'], ['life', 'edit_note', '生活紀錄（無地點）']].map(([k, ic, l]) => (
+          <button key={k} onClick={() => set('kind', k)} style={{ flex: 1, height: 48, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, fontSize: 14.5, fontWeight: 700,
+            background: r.kind === k ? 'var(--accent-l)' : 'var(--surface)', border: `1.5px solid ${r.kind === k ? 'var(--accent)' : 'var(--line)'}`, color: r.kind === k ? 'var(--accent-d)' : 'var(--sub)' }}>
+            <Ms n={ic} s={20} f={r.kind === k} />{l}
+          </button>
+        ))}
+      </div>
+
+      {r.kind === 'place' && (
+        <div style={sec}>
+          <div className="label"><Ms n="pin_drop" s={16} />地點</div>
+          {r.place ? (
+            <div className="card" style={{ padding: 12, display: 'flex', gap: 12, alignItems: 'center', boxShadow: 'none' }}>
+              <div style={{ width: 42, height: 42, borderRadius: 21, background: 'var(--accent-l)', color: 'var(--accent-d)', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ms n="location_on" s={22} f /></div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <input value={r.place.name} onChange={(e) => set('place', { ...r.place, name: e.target.value })} style={{ border: 0, outline: 0, background: 'none', fontWeight: 700, fontSize: 15.5, width: '100%', padding: 0 }} />
+                <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.45 }}>{r.place.addr || '—'}</div>
+                <div className="muted" style={{ fontSize: 11.5, fontFamily: 'JetBrains Mono, monospace', marginTop: 2 }}>{r.place.lat.toFixed(5)}, {r.place.lng.toFixed(5)}</div>
+              </div>
+              <button className="btn ghost sm" onClick={() => set('place', null)}>更換</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <button className="btn primary" onClick={locate} disabled={locBusy}><Ms n="my_location" s={20} />{locBusy ? '定位中…' : '精準定位我現在的位置'}</button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--faint)' }}><span style={{ flex: 1 }} className="dashed" />或搜尋地址・店家・地標<span style={{ flex: 1 }} className="dashed" /></div>
+              <PlaceSearch compact onSelect={(p) => set('place', p)} />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div style={sec}>
+        <div className="label"><Ms n="edit" s={16} />標題</div>
+        <input className="field" value={r.title} onChange={(e) => set('title', e.target.value)} placeholder={r.kind === 'life' ? '例如：第一次一起組書櫃' : '例如：巷口那碗牛肉麵'} />
+      </div>
+
+      <div style={{ ...sec, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div><div className="label"><Ms n="event" s={16} />日期</div><input type="date" className="field" value={r.date} onChange={(e) => set('date', e.target.value)} /></div>
+        <div><div className="label"><Ms n="schedule" s={16} />時間</div><input type="time" className="field" value={r.time} onChange={(e) => set('time', e.target.value)} /></div>
+      </div>
+      {r.date && <div style={{ padding: '6px 16px 0', fontSize: 13, color: 'var(--accent-d)' }}><Ms n="favorite" s={14} f /> 這天是在一起的第 <b className="hand" style={{ fontSize: 19 }}>{nf(dayNoOf(r.date, settings.anniv))}</b> 天</div>}
+
+      <div style={sec}>
+        <div className="label"><Ms n="sell" s={16} />分類</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{Object.keys(CATS).map(c => <CatChip key={c} cat={c} on={r.cat === c} onClick={() => set('cat', c)} />)}</div>
+      </div>
+
+      <div style={sec}>
+        <div className="label"><Ms n="photo_library" s={16} />照片與影片 <span style={{ marginLeft: 'auto', fontSize: 12 }}>{r.media.length ? `${r.media.length} 個檔案` : ''}</span></div>
+        <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files); }}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 6 }}>
+          <button onClick={() => fileRef.current.click()} style={{ aspectRatio: '1', borderRadius: 8, border: '1.5px dashed var(--accent)', background: 'var(--accent-l)', color: 'var(--accent-d)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, fontSize: 12.5 }}>
+            <Ms n="add_photo_alternate" s={28} />{uploading ? `處理中 ${uploading}` : '新增照片/影片'}
+          </button>
+          {shown.map((m, i) => (
+            <div key={m.id} style={{ position: 'relative', aspectRatio: '1' }}>
+              <MediaTile m={m} rec={r} idx={i} style={{ width: '100%', height: '100%' }} cover={false} />
+              {!m.seed && <button onClick={() => removeMedia(m.id)} style={{ position: 'absolute', top: 4, right: 4, width: 22, height: 22, borderRadius: 11, background: 'rgba(40,30,20,.6)', color: '#fff', display: 'grid', placeItems: 'center' }}><Ms n="close" s={14} /></button>}
+              {i === 0 && <span style={{ position: 'absolute', left: 4, top: 4, fontSize: 10, background: 'var(--accent)', color: '#fff', padding: '2px 6px', borderRadius: 6 }}>封面</span>}
+            </div>
+          ))}
+        </div>
+        <input ref={fileRef} type="file" accept="image/*,video/*" multiple hidden onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }} />
+        <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>可一次選多張，也可以直接把檔案拖曳進來。第一張會成為地圖上的圖針縮圖。</div>
+      </div>
+
+      <div style={sec}>
+        <div className="label"><Ms n="partly_cloudy_day" s={16} />天氣</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+          {WEATHERS.map(([k, l]) => (
+            <button key={k} onClick={() => set('weather', k)} className="chip" style={r.weather === k ? { background: 'var(--sky)', color: '#fff', borderColor: 'transparent' } : {}}><Ms n={k} s={17} />{l}</button>
+          ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><input type="number" className="field" value={r.temp ?? ''} onChange={(e) => set('temp', e.target.value)} placeholder="溫度" style={{ width: 76, height: 34 }} /><span className="muted">°C</span></div>
+        </div>
+      </div>
+
+      <div style={sec}>
+        <div className="label"><Ms n="mood" s={16} />心情貼紙</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6 }}>
+          {MOODS.map(([l, ic, c]) => (
+            <button key={l} onClick={() => set('mood', l)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '8px 0', borderRadius: 10, fontSize: 12,
+              background: r.mood === l ? c + '2E' : 'var(--surface)', border: `1.5px solid ${r.mood === l ? c : 'var(--line)'}`, transform: r.mood === l ? 'rotate(-4deg) scale(1.04)' : 'none', transition: 'all .2s cubic-bezier(.3,1.6,.5,1)' }}>
+              <Ms n={ic} s={26} f style={{ color: c }} />{l}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={sec}>
+        <div className="label"><Ms n="favorite" s={16} />喜歡程度</div>
+        <Hearts n={r.rating} s={30} onChange={(v) => set('rating', v)} />
+      </div>
+
+      <div style={{ ...sec, paddingBottom: 24 }}>
+        <div className="label"><Ms n="history_edu" s={16} />心得記事 <span style={{ marginLeft: 'auto', fontSize: 12 }}>可以現在寫，也可以之後再補</span></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[['her', settings.her, 'var(--her)', '妳想說的話…'], ['me', settings.me, 'var(--me)', '我想說的話…']].map(([k, who, c, ph]) => (
+            <div key={k} style={{ position: 'relative' }}>
+              <span style={{ position: 'absolute', left: 10, top: -8, fontSize: 11, fontWeight: 700, color: '#fff', background: c, borderRadius: 8, padding: '2px 8px', zIndex: 1 }}>{who}</span>
+              <textarea className="field" rows={3} value={r[k] || ''} onChange={(e) => set(k, e.target.value)} placeholder={ph} style={{ paddingTop: 16, background: 'repeating-linear-gradient(transparent 0 25px, var(--line) 25px 26px), var(--surface)', backgroundPosition: '0 9px' }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </Sheet>
+  );
+}
+
+function Lightbox({ items, index, rec, onClose }) {
+  const [i, setI] = React.useState(index);
+  const m = items[i];
+  const url = useMediaUrl(m && !m.seed ? m.id : null);
+  React.useEffect(() => {
+    const h = (e) => { if (e.key === 'Escape') onClose(); if (e.key === 'ArrowRight') setI(x => Math.min(items.length - 1, x + 1)); if (e.key === 'ArrowLeft') setI(x => Math.max(0, x - 1)); };
+    window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h);
+  }, [items.length]);
+  const nav = (d) => setI(x => Math.max(0, Math.min(items.length - 1, x + d)));
+  return ReactDOM.createPortal(
+    <div className="lightbox" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {m.seed ? (
+          <div className="ph" style={{ '--c': catC(rec.cat), width: 'min(80vw, 720px)', aspectRatio: '4/3', borderRadius: 4 }}>
+            <span className="ph-l" style={{ fontSize: 12 }}>{m.type === 'video' ? '影片' : '照片'} {i + 1} ・ 示意佔位（上傳後會顯示真實檔案）</span>
+          </div>
+        ) : m.type === 'video' ? (url && <video src={url} controls autoPlay playsInline />) : (url && <img src={url} alt="" />)}
+      </div>
+      <button onClick={onClose} style={{ position: 'absolute', top: 16, right: 16, color: '#fff' }} className="icon-btn" ><Ms n="close" s={22} style={{ color: 'var(--ink)' }} /></button>
+      {i > 0 && <button onClick={(e) => { e.stopPropagation(); nav(-1); }} className="icon-btn" style={{ position: 'absolute', left: 16, top: '50%' }}><Ms n="chevron_left" s={26} /></button>}
+      {i < items.length - 1 && <button onClick={(e) => { e.stopPropagation(); nav(1); }} className="icon-btn" style={{ position: 'absolute', right: 16, top: '50%' }}><Ms n="chevron_right" s={26} /></button>}
+      <div style={{ position: 'absolute', bottom: 20, left: 0, right: 0, textAlign: 'center', color: '#fff', fontSize: 14 }}>{rec.title}・{i + 1} / {items.length}</div>
+    </div>, document.body);
+}
+
+function Gallery({ r, onOpen, h = 260 }) {
+  const m = recMedia(r);
+  if (!m.length) return (
+    <div className="ph" style={{ '--c': catC(r.cat), height: h * .6, borderRadius: 8, display: 'grid', placeItems: 'center' }}>
+      <span className="muted" style={{ fontSize: 13 }}>還沒有照片，按「編輯」補上吧</span>
+    </div>
+  );
+  const more = m.length - 5;
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: m.length === 1 ? '1fr' : '2fr 1fr 1fr', gridTemplateRows: `${h / 2 - 2}px ${h / 2 - 2}px`, gap: 4 }}>
+      {m.slice(0, 5).map((x, i) => (
+        <MediaTile key={x.id} m={x} rec={r} idx={i} onClick={() => onOpen(i)}
+          style={{ gridRow: i === 0 ? 'span 2' : undefined, height: '100%', borderRadius: 6 }}
+          label={i === 4 && more > 0 ? `+${more}` : null} />
+      ))}
+    </div>
+  );
+}
+
+function Detail({ r, settings, onClose, onEdit, onShowMap }) {
+  const [lb, setLb] = React.useState(null);
+  const f = fmt(r.date);
+  const c = mediaCount(r);
+  const items = recMedia(r);
+  return (
+    <Sheet title="" onClose={onClose} wide
+      headExtra={<div style={{ display: 'flex', gap: 8 }}>
+        {r.place && onShowMap && <button className="btn ghost sm" onClick={() => onShowMap(r)}><Ms n="map" s={18} />在地圖上看</button>}
+        <button className="btn primary sm" style={{ boxShadow: 'none' }} onClick={() => onEdit(r)}><Ms n="edit" s={18} />編輯 / 補寫心得</button>
+      </div>}>
+      <div style={{ padding: 18, display: 'grid', gap: 20, gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', alignItems: 'start' }}>
+        <div>
+          <Gallery r={r} onOpen={setLb} />
+          {items.length > 5 && (
+            <div style={{ display: 'flex', gap: 4, marginTop: 4, overflowX: 'auto' }}>
+              {items.slice(5).map((x, i) => <MediaTile key={x.id} m={x} rec={r} idx={i + 5} onClick={() => setLb(i + 5)} style={{ width: 64, height: 64, flexShrink: 0 }} />)}
+            </div>
+          )}
+          <div className="muted" style={{ fontSize: 12.5, marginTop: 8, display: 'flex', gap: 12 }}>
+            <span><Ms n="photo_library" s={15} /> {c.p} 張照片</span><span><Ms n="videocam" s={15} /> {c.v} 支影片</span>
+          </div>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 4 }}>
+            <span className="hand" style={{ fontSize: 34, color: catC(r.cat), fontWeight: 700, lineHeight: 1 }}>{f.full}</span>
+            <span className="muted" style={{ fontSize: 13 }}>週{f.wk} {r.time}</span>
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--accent-d)', marginBottom: 10 }}><Ms n="favorite" s={14} f /> 在一起的第 <b className="hand" style={{ fontSize: 20 }}>{nf(dayNoOf(r.date, settings.anniv))}</b> 天</div>
+          <h2 style={{ margin: '0 0 10px', fontSize: 26, lineHeight: 1.3, textWrap: 'pretty' }}>{r.title}</h2>
+          <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}><CatChip cat={r.cat} on sm /></div>
+          {r.place ? (
+            <div className="card" style={{ padding: 12, boxShadow: 'none', marginBottom: 14, display: 'flex', gap: 10 }}>
+              <Ms n="location_on" s={22} f style={{ color: 'var(--terra)' }} />
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 700 }}>{r.place.name}</div>
+                <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5 }}>{r.place.addr}</div>
+                <div className="muted" style={{ fontSize: 11.5, fontFamily: 'JetBrains Mono, monospace' }}>{(+r.place.lat).toFixed(5)}, {(+r.place.lng).toFixed(5)}</div>
+              </div>
+            </div>
+          ) : <div className="muted" style={{ fontSize: 13, marginBottom: 14 }}><Ms n="edit_note" s={16} /> 生活紀錄・沒有標記地點</div>}
+          <div style={{ marginBottom: 16 }}><MetaLine r={r} s={13.5} /></div>
+          <div style={{ position: 'relative', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 4, padding: '22px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12,
+            backgroundImage: 'repeating-linear-gradient(transparent 0 27px, rgba(230,217,195,.6) 27px 28px)', backgroundPosition: '0 14px' }}>
+            <Tape color="var(--honey)" style={{ top: -8, left: 24, transform: 'rotate(-5deg)' }} />
+            <Tape color="var(--accent)" style={{ top: -8, right: 24, transform: 'rotate(6deg)', width: 48 }} />
+            {r.her || r.me ? <>
+              <Voice who={settings.her} text={r.her} color="var(--her)" s={15} />
+              <Voice who={settings.me} text={r.me} color="var(--me)" s={15} />
+            </> : <div className="muted" style={{ fontSize: 14 }}>還沒寫下心得，按右上「編輯 / 補寫心得」留下當時的心情吧。</div>}
+          </div>
+        </div>
+      </div>
+      {lb != null && <Lightbox items={items} index={lb} rec={r} onClose={() => setLb(null)} />}
+    </Sheet>
+  );
+}
+
+function TLVertical({ list, onOpen, settings, desk }) {
+  const groups = [];
+  list.forEach(r => { const k = r.date.slice(0, 4); let g = groups.find(g => g.k === k); if (!g) groups.push(g = { k, items: [] }); g.items.push(r); });
+  return (
+    <div>
+      {groups.map(g => (
+        <div key={g.k}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, margin: '10px 0 16px' }}>
+            <span className="hand" style={{ fontSize: desk ? 42 : 32, fontWeight: 700, color: 'var(--accent-d)', lineHeight: 1 }}>{g.k}</span>
+            <span style={{ flex: 1 }} className="dashed" />
+            <span className="muted" style={{ fontSize: 12.5 }}>{g.items.length} 則回憶</span>
+          </div>
+          {g.items.map((r, i) => {
+            const f = fmt(r.date); const m = recMedia(r);
+            return (
+              <div key={r.id} className="fade-in" style={{ display: 'grid', gridTemplateColumns: desk ? '110px 28px 1fr' : '48px 22px 1fr', marginBottom: 18, animationDelay: i * 40 + 'ms' }}>
+                <div style={{ textAlign: 'right', paddingTop: 4 }}>
+                  <div className="hand" style={{ fontSize: desk ? 30 : 22, fontWeight: 700, lineHeight: 1 }}>{f.md}</div>
+                  <div className="muted" style={{ fontSize: 11.5, lineHeight: 1.7 }}>週{f.wk}</div>
+                  {desk && <div style={{ fontSize: 11.5, color: 'var(--accent-d)', marginTop: 4 }}>第 {nf(dayNoOf(r.date, settings.anniv))} 天</div>}
+                </div>
+                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                  <div style={{ position: 'absolute', top: 0, bottom: -18, borderLeft: '2px dashed var(--line)' }} />
+                  <div style={{ position: 'relative', marginTop: 8, width: 13, height: 13, borderRadius: 7, background: catC(r.cat), border: '3px solid var(--bg)', boxSizing: 'content-box' }} />
+                </div>
+                <button className="card" onClick={() => onOpen(r)} style={{ textAlign: 'left', padding: desk ? 16 : 12, marginLeft: 6, display: desk ? 'grid' : 'block', gridTemplateColumns: desk ? '250px 1fr' : undefined, gap: 18, transition: 'transform .2s, box-shadow .2s' }}>
+                  {m.length > 0 && (
+                    <div style={{ display: 'grid', gridTemplateColumns: desk ? '2fr 1fr' : '2fr 1fr 1fr', gridTemplateRows: desk ? '82px 82px' : '76px', gap: 4, marginBottom: desk ? 0 : 10 }}>
+                      {m.slice(0, 3).map((x, j) => <MediaTile key={x.id} m={x} rec={r} idx={j} style={{ height: '100%', gridRow: desk && j === 0 ? 'span 2' : undefined }} label={j === 0 ? `${m.length} 個` : null} />)}
+                    </div>
+                  )}
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+                      <CatChip cat={r.cat} on sm />
+                      {!desk && <span style={{ fontSize: 11.5, color: 'var(--accent-d)' }}>第 {nf(dayNoOf(r.date, settings.anniv))} 天</span>}
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: desk ? 19 : 16, lineHeight: 1.35, marginBottom: 4, textWrap: 'pretty' }}>{r.title}</div>
+                    <div className="muted" style={{ fontSize: 12.5, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 3 }}><Ms n={r.place ? 'location_on' : 'edit_note'} s={15} />{r.place ? r.place.name : '生活紀錄'}</div>
+                    {desk && <div style={{ marginBottom: 8 }}><MetaLine r={r} /></div>}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <Voice who={settings.her} text={r.her} color="var(--her)" s={13} clamp={2} />
+                      {desk && <Voice who={settings.me} text={r.me} color="var(--me)" s={13} clamp={2} />}
+                    </div>
+                  </div>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TLPolaroid({ list, onOpen, desk }) {
+  const tapes = ['var(--honey)', 'var(--accent)', 'var(--rose)', 'var(--sky)'];
+  const cols = desk ? 4 : 2;
+  const colsArr = Array.from({ length: cols }, () => []);
+  list.forEach((r, i) => colsArr[i % cols].push([r, i]));
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: desk ? 26 : 14, paddingTop: 14 }}>
+      {colsArr.map((col, ci) => (
+        <div key={ci} style={{ display: 'flex', flexDirection: 'column', gap: desk ? 34 : 22 }}>
+          {col.map(([r, i]) => {
+            const rot = [-2.4, 1.8, -1.2, 2.6, 1, -2][i % 6]; const m = recMedia(r); const tall = i % 3 === 0;
+            return (
+              <button key={r.id} onClick={() => onOpen(r)} className="fade-in" style={{ position: 'relative', transform: `rotate(${rot}deg)`, background: '#FFFEFA', padding: desk ? '12px 12px 14px' : '8px 8px 10px', boxShadow: '0 3px 12px rgba(60,40,20,.15)', borderRadius: 3, textAlign: 'left', transition: 'transform .25s cubic-bezier(.3,1.5,.5,1)' }}>
+                <Tape color={tapes[i % 4]} style={{ top: -9, left: '50%', marginLeft: -32, transform: `rotate(${-rot * 2}deg)` }} />
+                <MediaTile m={m[0]} rec={r} idx={0} style={{ height: desk ? (tall ? 220 : 170) : (tall ? 150 : 112), borderRadius: 1 }} label={m.length ? `${m.length} 個` : '尚無照片'} />
+                <div style={{ padding: desk ? '10px 4px 0' : '7px 2px 0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                    <span className="hand" style={{ fontSize: desk ? 22 : 17, fontWeight: 700, color: catC(r.cat), lineHeight: 1 }}>{fmt(r.date).full}</span>
+                    <span className="muted" style={{ fontSize: 10.5 }}>#{r.cat}</span>
+                  </div>
+                  <div style={{ fontSize: desk ? 15 : 13.5, fontWeight: 700, lineHeight: 1.4, marginTop: 5 }}>{r.title}</div>
+                  {desk && r.her && <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.5, marginTop: 4 }}>「{r.her}」</div>}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MonthGrid({ y, m, list, onOpen, selDay, onSel, desk }) {
+  const first = new Date(y, m - 1, 1).getDay(); const days = new Date(y, m, 0).getDate();
+  const key = `${y}-${pad2(m)}`;
+  const recs = list.filter(r => r.date.startsWith(key));
+  const cells = []; for (let i = 0; i < first; i++) cells.push(null); for (let d = 1; d <= days; d++) cells.push(d);
+  const today = new Date(); const isToday = (d) => today.getFullYear() === y && today.getMonth() + 1 === m && today.getDate() === d;
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+      {WEEK.map(w => <div key={w} style={{ textAlign: 'center', fontSize: 12, color: 'var(--sub)', lineHeight: '24px' }}>{w}</div>)}
+      {cells.map((d, i) => {
+        const dr = d ? recs.filter(r => +r.date.slice(8) === d) : [];
+        const r = dr[0]; const th = r && firstThumb(r);
+        const sel = selDay === d;
+        return (
+          <button key={i} disabled={!d} onClick={() => d && onSel(d)} style={{ height: desk ? 76 : 48, borderRadius: 6, position: 'relative', overflow: 'hidden', cursor: d ? 'pointer' : 'default',
+            background: r ? (th ? `center/cover url(${th})` : `repeating-linear-gradient(135deg, ${catC(r.cat)}66 0 5px, ${catC(r.cat)}2A 5px 10px)`) : (d ? 'var(--surface)' : 'transparent'),
+            outline: sel ? '2px solid var(--ink)' : (isToday(d) ? '2px solid var(--accent)' : 'none'), outlineOffset: -2, border: d && !r ? '1px solid var(--line)' : 0 }}>
+            {d && <span style={{ position: 'absolute', left: 5, top: 4, fontSize: 12, fontWeight: r ? 700 : 400, color: r ? 'var(--ink)' : 'var(--sub)', background: th ? 'rgba(255,251,243,.85)' : 'none', borderRadius: 4, padding: th ? '0 3px' : 0 }}>{d}</span>}
+            {r && <span style={{ position: 'absolute', right: 3, bottom: 3, width: 18, height: 18, borderRadius: 9, background: catC(r.cat), color: '#fff', display: 'grid', placeItems: 'center' }}><Ms n={catI(r.cat)} s={12} f /></span>}
+            {dr.length > 1 && <span style={{ position: 'absolute', left: 4, bottom: 3, fontSize: 10, fontWeight: 700 }}>+{dr.length - 1}</span>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function TLCalendar({ list, onOpen, desk }) {
+  const latest = list[0] ? parseD(list[0].date) : new Date();
+  const [ym, setYm] = React.useState({ y: latest.getFullYear(), m: latest.getMonth() + 1 });
+  const [sel, setSel] = React.useState(null);
+  const shift = (d) => { setSel(null); setYm(({ y, m }) => { let nm = m + d, ny = y; if (nm < 1) { nm = 12; ny--; } if (nm > 12) { nm = 1; ny++; } return { y: ny, m: nm }; }); };
+  const key = `${ym.y}-${pad2(ym.m)}`;
+  const monthRecs = list.filter(r => r.date.startsWith(key));
+  const shown = sel ? monthRecs.filter(r => +r.date.slice(8) === sel) : monthRecs;
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: desk ? '1.4fr 1fr' : '1fr', gap: 18, paddingTop: 8, alignItems: 'start' }}>
+      <div className="card" style={{ padding: desk ? 18 : 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <button className="icon-btn" style={{ width: 36, height: 36, boxShadow: 'none' }} onClick={() => shift(-1)}><Ms n="chevron_left" s={22} /></button>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontWeight: 700, fontSize: 19 }}>{ym.y} 年 {ym.m} 月</div>
+            <div className="muted" style={{ fontSize: 12 }}>{monthRecs.length} 則回憶</div>
+          </div>
+          <button className="icon-btn" style={{ width: 36, height: 36, boxShadow: 'none' }} onClick={() => shift(1)}><Ms n="chevron_right" s={22} /></button>
+        </div>
+        <MonthGrid y={ym.y} m={ym.m} list={list} selDay={sel} onSel={(d) => setSel(sel === d ? null : d)} desk={desk} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="muted" style={{ fontSize: 13 }}>{sel ? `${ym.m} 月 ${sel} 日` : `${ym.m} 月的我們`}</div>
+        {shown.length === 0 && <div className="card" style={{ padding: 20, textAlign: 'center', color: 'var(--sub)', fontSize: 14, boxShadow: 'none' }}>{sel ? '這天沒有紀錄' : '這個月還沒有紀錄，翻翻其他月份吧'}</div>}
+        {shown.map(r => (
+          <button key={r.id} className="card fade-in" onClick={() => onOpen(r)} style={{ padding: 10, display: 'flex', gap: 12, alignItems: 'center', textAlign: 'left' }}>
+            <MediaTile m={recMedia(r)[0]} rec={r} style={{ width: 60, height: 60, flexShrink: 0 }} />
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ fontSize: 12, color: catC(r.cat), fontWeight: 700, marginBottom: 3 }}>{fmt(r.date).md}・{r.cat}</div>
+              <div className="ellipsis" style={{ fontWeight: 700, fontSize: 15 }}>{r.title}</div>
+              <div className="muted ellipsis" style={{ fontSize: 12 }}>{r.place ? r.place.name : '生活紀錄'}</div>
+            </div>
+            <Hearts n={r.rating} s={12} />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Stats({ list, desk }) {
+  const places = new Set(list.filter(r => r.place).map(r => r.place.name)).size;
+  let p = 0, v = 0, w = 0; list.forEach(r => { const c = mediaCount(r); p += c.p; v += c.v; if (r.her || r.me) w++; });
+  const items = [['place', places, '個地方', 'var(--terra)'], ['photo_library', p, '張照片', 'var(--honey)'], ['videocam', v, '支影片', 'var(--sky)'], ['history_edu', w, '則心得', 'var(--accent)']];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: desk ? 12 : 6 }}>
+      {items.map(([ic, n, l, c]) => (
+        <div key={l} className="card" style={{ padding: desk ? '12px 16px' : '8px 4px', display: 'flex', alignItems: 'center', justifyContent: desk ? 'flex-start' : 'center', gap: 10, boxShadow: 'none', textAlign: desk ? 'left' : 'center' }}>
+          {desk && <Ms n={ic} s={26} style={{ color: c }} />}
+          <div><div className="hand" style={{ fontSize: desk ? 28 : 22, fontWeight: 700, lineHeight: 1 }}>{n}</div><div className="muted" style={{ fontSize: desk ? 12.5 : 11 }}>{l}</div></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TimelineView({ records, settings, onOpen, layout, setLayout, onAdd }) {
+  const desk = useIsDesk();
+  const [cat, setCat] = React.useState(null);
+  const [q, setQ] = React.useState('');
+  const list = sortRecs(records).filter(r => (!cat || r.cat === cat) && (!q.trim() || (r.title + (r.place ? r.place.name + r.place.addr : '') + (r.her || '') + (r.me || '')).includes(q.trim())));
+  const kinds = [['vertical', '時間軸', 'view_timeline'], ['polaroid', '拍立得', 'photo_library'], ['calendar', '月曆', 'calendar_month']];
+  return (
+    <div className="scroll paper" style={{ flex: 1, height: '100%' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: desk ? '30px 48px 60px' : '14px 16px 120px' }}>
+        <div style={{ display: 'flex', alignItems: desk ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 16, flexDirection: desk ? 'row' : 'column' }}>
+          <div>
+            <div className="hand" style={{ fontSize: desk ? 26 : 21, color: 'var(--accent-d)', marginBottom: 4 }}>our little footprints</div>
+            <h1 style={{ margin: 0, fontSize: desk ? 42 : 28, lineHeight: 1.15 }}>我們一起走過的…</h1>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', width: desk ? 'auto' : '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, height: 40, padding: '0 12px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 999, flex: desk ? '0 0 240px' : 1 }}>
+              <Ms n="search" s={18} style={{ color: 'var(--sub)' }} />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜尋回憶…" style={{ border: 0, outline: 0, background: 'none', flex: 1, minWidth: 0, fontSize: 14 }} />
+            </div>
+            <div className="seg">{kinds.map(([k, l, ic]) => <button key={k} className={layout === k ? 'on' : ''} onClick={() => setLayout(k)}><Ms n={ic} s={16} />{desk && l}</button>)}</div>
+          </div>
+        </div>
+        <Stats list={records} desk={desk} />
+        <div style={{ margin: '14px 0 8px' }}><CatFilter value={cat} onChange={setCat} /></div>
+        {list.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--sub)' }}>
+            <Ms n="travel_explore" s={44} style={{ color: 'var(--faint)' }} /><div style={{ margin: '10px 0 16px' }}>沒有符合的回憶</div>
+            <button className="btn primary" onClick={onAdd}><Ms n="add" s={18} />新增一筆</button>
+          </div>
+        ) : layout === 'polaroid' ? <TLPolaroid list={list} onOpen={onOpen} desk={desk} />
+          : layout === 'calendar' ? <TLCalendar list={list} onOpen={onOpen} desk={desk} />
+          : <TLVertical list={list} onOpen={onOpen} settings={settings} desk={desk} />}
+      </div>
+    </div>
+  );
+}
+
+function onThisDay(records) {
+  const t = new Date(); const md = `-${pad2(t.getMonth() + 1)}-${pad2(t.getDate())}`;
+  return sortRecs(records.filter(r => r.date.endsWith(md) && +r.date.slice(0, 4) < t.getFullYear()));
+}
+
+function OnThisDay({ records, onOpen, compact }) {
+  const list = onThisDay(records);
+  if (!list.length) return null;
+  const r = list[0]; const yrs = new Date().getFullYear() - +r.date.slice(0, 4);
+  return (
+    <button onClick={() => onOpen(r)} className="fade-in" style={{ display: 'flex', gap: 12, alignItems: 'center', padding: compact ? 10 : 12, borderRadius: 10, background: 'color-mix(in oklab, var(--honey) 22%, var(--surface))', border: '1px solid color-mix(in oklab, var(--honey) 45%, var(--line))', textAlign: 'left', width: '100%', position: 'relative' }}>
+      <Tape color="var(--rose)" style={{ top: -7, right: 18, width: 46, height: 14, transform: 'rotate(8deg)' }} />
+      <MediaTile m={recMedia(r)[0]} rec={r} style={{ width: compact ? 48 : 60, height: compact ? 48 : 60, flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#A97B2C', display: 'flex', alignItems: 'center', gap: 3, marginBottom: 3 }}><Ms n="history" s={15} />{yrs === 1 ? '去年的今天' : `${yrs} 年前的今天`}</div>
+        <div className="ellipsis" style={{ fontWeight: 700, fontSize: 15 }}>{r.title}</div>
+        <div className="muted ellipsis" style={{ fontSize: 12 }}>{fmt(r.date).full}・{r.place ? r.place.name : '生活紀錄'}</div>
+      </div>
+      <Ms n="chevron_right" s={22} style={{ color: 'var(--sub)' }} />
+    </button>
+  );
+}
+
+function RecRow({ r, on, onClick, settings }) {
+  return (
+    <button onClick={onClick} style={{ display: 'flex', gap: 12, padding: 10, borderRadius: 10, width: '100%', textAlign: 'left', background: on ? 'var(--accent-l)' : 'transparent', border: `1px solid ${on ? 'var(--accent)' : 'transparent'}`, transition: 'background .15s' }}>
+      <MediaTile m={recMedia(r)[0]} rec={r} style={{ width: 68, height: 68, flexShrink: 0 }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
+          <span style={{ color: catC(r.cat), fontWeight: 700 }}>{r.cat}</span><span className="muted">{fmt(r.date).full}</span>
+        </div>
+        <div className="ellipsis" style={{ fontWeight: 700, fontSize: 15, marginBottom: 2 }}>{r.title}</div>
+        <div className="muted ellipsis" style={{ fontSize: 12.5 }}>{r.her || r.me || (r.place ? r.place.name : '')}</div>
+      </div>
+    </button>
+  );
+}
+
+function PlaceCard({ r, settings, onOpen, onClose, desk }) {
+  const m = recMedia(r);
+  return (
+    <div className="card fade-in" key={r.id} style={{ padding: 12, boxShadow: 'var(--shadow-l)', position: 'relative', width: desk ? 360 : 'auto' }}>
+      {!desk && <div style={{ width: 36, height: 4, borderRadius: 2, background: 'var(--line)', margin: '-4px auto 10px' }} />}
+      <button onClick={onClose} style={{ position: 'absolute', top: 8, right: 8, color: 'var(--faint)', display: 'grid' }}><Ms n="close" s={20} /></button>
+      {desk && m.length > 0 && <div style={{ marginBottom: 10 }}><Gallery r={r} h={150} onOpen={() => onOpen(r)} /></div>}
+      <div style={{ display: 'flex', gap: 12 }}>
+        {!desk && <div style={{ position: 'relative' }}><MediaTile m={m[0]} rec={r} style={{ width: 92, height: 92 }} label={m.length > 1 ? `${m.length} 個` : null} /><Tape color="var(--honey)" style={{ width: 40, height: 14, top: -6, left: 26, transform: 'rotate(-6deg)' }} /></div>}
+        <div style={{ flex: 1, minWidth: 0, paddingRight: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, flexWrap: 'wrap' }}>
+            <CatChip cat={r.cat} on sm />
+            <span className="muted" style={{ fontSize: 11.5 }}>{fmt(r.date).full}・第 {nf(dayNoOf(r.date, settings.anniv))} 天</span>
+          </div>
+          <div style={{ fontWeight: 700, fontSize: 17, lineHeight: 1.3, marginBottom: 3 }}>{r.title}</div>
+          <div className="muted" style={{ fontSize: 12, marginBottom: 6, lineHeight: 1.4 }}>{r.place.name}{desk && r.place.addr ? '・' + r.place.addr : ''}</div>
+          <MetaLine r={r} s={11.5} />
+        </div>
+      </div>
+      <div className="dashed" style={{ marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <Voice who={settings.her} text={r.her} color="var(--her)" s={13} clamp={2} />
+        {desk && <Voice who={settings.me} text={r.me} color="var(--me)" s={13} clamp={2} />}
+      </div>
+      <button className="btn ghost sm" style={{ width: '100%', marginTop: 10 }} onClick={() => onOpen(r)}>打開這段回憶<Ms n="arrow_forward" s={16} /></button>
+    </div>
+  );
+}
+
+function MapView({ records, settings, base, setBase, onOpen, onAdd, focus }) {
+  const desk = useIsDesk();
+  const toast = useToast();
+  const [cat, setCat] = React.useState(null);
+  const [active, setActive] = React.useState(null);
+  const [fly, setFly] = React.useState(null);
+  const [me, setMe] = React.useState(null);
+  const [found, setFound] = React.useState(null);
+  const [locBusy, setLocBusy] = React.useState(false);
+  const [bounds, setBounds] = React.useState(null);
+  const [onlyView, setOnlyView] = React.useState(false);
+  const list = sortRecs(records).filter(r => r.place && (!cat || r.cat === cat));
+  const sideList = onlyView ? list.filter(r => !bounds || bounds.contains([r.place.lat, r.place.lng])) : list;
+  const activeRec = records.find(r => r.id === active);
+
+  React.useEffect(() => { if (focus) { setActive(focus.id); setFly({ lat: focus.place.lat, lng: focus.place.lng, zoom: 16, k: Date.now() }); } }, [focus]);
+
+  const pick = (id) => { const r = records.find(x => x.id === id); setActive(id); setFound(null); if (r) setFly({ lat: r.place.lat, lng: r.place.lng, k: Date.now() }); };
+  const locate = async () => {
+    setLocBusy(true);
+    try {
+      const p = await Geo.locate(); setMe(p); setFly({ lat: p.lat, lng: p.lng, zoom: 17, k: Date.now() });
+      const info = await Geo.reverse(p.lat, p.lng);
+      setFound({ ...info, lat: p.lat, lng: p.lng, acc: p.acc, isMe: true }); setActive(null);
+    } catch (e) { toast(e.code === 1 ? '請允許瀏覽器存取位置' : '定位失敗，可改用搜尋', 'location_off'); }
+    setLocBusy(false);
+  };
+  const onSelectPlace = (p) => { setFound(p); setActive(null); setFly({ lat: p.lat, lng: p.lng, zoom: 17, k: Date.now() }); };
+
+  const foundCard = found && (
+    <div className="card fade-in" style={{ padding: 14, boxShadow: 'var(--shadow-l)', width: desk ? 360 : 'auto' }}>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+        <div style={{ width: 40, height: 40, borderRadius: 20, background: 'var(--accent-l)', color: 'var(--accent-d)', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ms n={found.isMe ? 'my_location' : 'location_on'} s={22} f /></div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="muted" style={{ fontSize: 12 }}>{found.isMe ? `你在這裡（誤差約 ${Math.round(found.acc)} 公尺）` : '搜尋到的地點'}・可拖曳圖針微調</div>
+          <div style={{ fontWeight: 700, fontSize: 17 }}>{found.name}</div>
+          <div className="muted" style={{ fontSize: 12.5, lineHeight: 1.45 }}>{found.addr}</div>
+          <div className="muted" style={{ fontSize: 11.5, fontFamily: 'JetBrains Mono, monospace' }}>{found.lat.toFixed(5)}, {found.lng.toFixed(5)}</div>
+        </div>
+        <button onClick={() => setFound(null)} style={{ color: 'var(--faint)', display: 'grid' }}><Ms n="close" s={20} /></button>
+      </div>
+      <button className="btn primary" style={{ width: '100%', marginTop: 12 }} onClick={() => { onAdd({ place: { name: found.name, addr: found.addr, lat: found.lat, lng: found.lng } }); setFound(null); }}><Ms n="add_location_alt" s={20} />在這裡打卡</button>
+    </div>
+  );
+
+  const map = (
+    <UsMap records={list} activeId={active} onPick={pick} base={base} flyTo={fly} me={me}
+      draft={found} onDraftMove={(ll) => setFound(f => ({ ...f, lat: ll.lat, lng: ll.lng }))}
+      onMapClick={() => { setActive(null); }} onBoundsChange={setBounds}
+      padBottom={desk ? 0 : 260} padLeft={0} />
+  );
+
+  const baseSwitch = (
+    <div className="seg" style={{ boxShadow: '0 4px 12px rgba(75,58,47,.1)' }}>
+      {[['theme', '主題底圖'], ['street', '明亮街道']].map(([k, l]) => <button key={k} className={base === k ? 'on' : ''} onClick={() => setBase(k)}>{l}</button>)}
+    </div>
+  );
+
+  if (desk) return (
+    <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+      <aside style={{ width: 390, flexShrink: 0, background: 'var(--surface)', borderRight: '1px solid var(--line)', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+        <div style={{ padding: '18px 18px 10px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <PlaceSearch records={records} onSelect={onSelectPlace} onRecord={(r) => r.place ? pick(r.id) : onOpen(r)} />
+            <button className="icon-btn accent" title="精準定位" onClick={locate} style={{ height: 46, width: 46, borderRadius: 12 }}><Ms n={locBusy ? 'progress_activity' : 'my_location'} s={22} /></button>
+          </div>
+          <CatFilter value={cat} onChange={setCat} />
+          <OnThisDay records={records} onOpen={onOpen} compact />
+        </div>
+        <div style={{ padding: '4px 18px 6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5 }}>
+          <span className="muted">{sideList.length} 個地方</span>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', color: 'var(--sub)' }}>
+            <input type="checkbox" checked={onlyView} onChange={(e) => setOnlyView(e.target.checked)} style={{ accentColor: 'var(--accent)' }} />只看地圖範圍內
+          </label>
+        </div>
+        <div className="scroll" style={{ flex: 1, padding: '0 10px 16px' }}>
+          {sideList.map(r => <RecRow key={r.id} r={r} on={r.id === active} onClick={() => pick(r.id)} settings={settings} />)}
+          {sideList.length === 0 && <div className="muted" style={{ textAlign: 'center', padding: 30, fontSize: 14 }}>這個範圍內還沒有足跡</div>}
+        </div>
+      </aside>
+      <div style={{ flex: 1, position: 'relative' }}>
+        {map}
+        <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 500 }}>{baseSwitch}</div>
+        <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 500 }}>
+          {activeRec && activeRec.place && <PlaceCard r={activeRec} settings={settings} onOpen={onOpen} onClose={() => setActive(null)} desk />}
+          {foundCard}
+        </div>
+        <div style={{ position: 'absolute', right: 16, bottom: 28, zIndex: 500, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <button className="icon-btn" onClick={() => window.__usMap.zoomIn()}><Ms n="add" s={22} /></button>
+          <button className="icon-btn" onClick={() => window.__usMap.zoomOut()}><Ms n="remove" s={22} /></button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ flex: 1, position: 'relative' }}>
+      {map}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 500, padding: '10px 12px 18px', background: 'linear-gradient(var(--bg) 55%, transparent)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <div className="brand" style={{ fontSize: 15 }}><span className="hand" style={{ fontSize: 22 }}>us ♡</span>關於妳，關於我，關於我們</div>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <PlaceSearch records={records} onSelect={onSelectPlace} onRecord={(r) => r.place ? pick(r.id) : onOpen(r)} />
+          <button className="icon-btn accent" onClick={locate} style={{ height: 46, width: 46, borderRadius: 12 }}><Ms n={locBusy ? 'progress_activity' : 'my_location'} s={22} /></button>
+        </div>
+        <div style={{ marginTop: 8 }}><CatFilter value={cat} onChange={setCat} /></div>
+      </div>
+      <div style={{ position: 'absolute', right: 12, top: 168, zIndex: 500 }}>
+        <button className="icon-btn" onClick={() => setBase(base === 'theme' ? 'street' : 'theme')} title="切換底圖"><Ms n="layers" s={22} /></button>
+      </div>
+      <div style={{ position: 'absolute', left: 12, right: 12, bottom: 92, zIndex: 550 }}>
+        {activeRec && activeRec.place ? <PlaceCard r={activeRec} settings={settings} onOpen={onOpen} onClose={() => setActive(null)} />
+          : found ? foundCard
+          : <OnThisDay records={records} onOpen={onOpen} />}
+      </div>
+    </div>
+  );
+}
+
+// ----------------- 約會聯絡簿 -----------------
+const BOARD_LS = 'us-board-v1';
+const DAYMS = 86400000;
+const todayIso = () => Store.iso(new Date());
+const addDaysIso = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return Store.iso(d); };
+const daysUntil = (iso) => { const t = new Date(); const t0 = new Date(t.getFullYear(), t.getMonth(), t.getDate()); return Math.round((parseD(iso) - t0) / DAYMS); };
+const dueText = (n) => n === 0 ? '就是今天' : n === 1 ? '明天' : n > 1 ? `還有 ${n} 天` : `已過 ${-n} 天`;
+const partnerOf = (who) => (who === 'me' ? 'her' : 'me');
+function agoText(ts) {
+  const m = Math.floor((Date.now() - ts) / 60000);
+  if (m < 1) return '剛剛'; if (m < 60) return `${m} 分鐘前`;
+  const h = Math.floor(m / 60); if (h < 24) return `${h} 小時前`;
+  const d = Math.floor(h / 24); if (d < 7) return `${d} 天前`;
+  const x = new Date(ts); return `${x.getMonth() + 1}/${x.getDate()}`;
+}
+
+const BTYPES = {
+  note: { l: '便利貼', icon: 'sticky_note_2', c: 'var(--honey)', hint: '留言、分享心情' },
+  proposal: { l: '約會提議', icon: 'local_activity', c: 'var(--her)', hint: '邀請對方下次一起去' },
+  todo: { l: '待辦', icon: 'checklist', c: 'var(--accent)', hint: '兩個人要記得的事' },
+  quest: { l: '戀愛任務', icon: 'stars', c: 'var(--sky)', hint: '想一起完成的願望清單' },
+};
+const QUEST_CATS = { 一起做菜: 'skillet', 看電影: 'movie', 看夜景: 'nightlight', 旅行: 'flight', 體驗: 'palette', 挑戰: 'bolt', 其他: 'favorite' };
+const QUEST_TO_REC = { 一起做菜: '吃飯', 看電影: '日常', 看夜景: '日常', 旅行: '旅行', 體驗: '體驗', 挑戰: '日常', 其他: '日常' };
+const NOTE_COLORS = ['#FCE9A8', '#F8D6D3', '#DCEBD9', '#D8E7F0', '#E8DFF2'];
+
+function boardSeed() {
+  const now = Date.now(), H = 3600000;
+  localStorage.setItem('us-board-seen-me', String(now - 20 * H));
+  localStorage.setItem('us-board-seen-her', String(now));
+  const B = (o) => ({ id: Store.uid(), replies: [], done: false, text: '', title: '', date: '', time: '', ...o });
+  return [
+    B({ type: 'note', author: 'her', createdAt: now - 0.7 * H, text: '今天加班好累⋯但想到週末要見面就又有力氣了！', color: NOTE_COLORS[1], mood: '累累' }),
+    B({ type: 'proposal', author: 'her', createdAt: now - 3 * H, title: '去象山看夜景＋吃宵夜', date: addDaysIso(4), time: '18:30', place: { name: '象山親山步道', addr: '台北市信義區信義路五段150巷', lat: 25.0275, lng: 121.5705 }, text: '記得穿好走的鞋，我帶熱可可！', status: 'pending' }),
+    B({ type: 'quest', author: 'her', createdAt: now - 6 * H, title: '挑戰一起做一個生日蛋糕', qcat: '一起做菜', date: addDaysIso(5) }),
+    B({ type: 'note', author: 'me', createdAt: now - 2 * 24 * H, text: '上次那家咖啡廳的檸檬塔超好吃，下次再去一次？', color: NOTE_COLORS[0], mood: '開心', replies: [{ id: Store.uid(), author: 'her', text: '好呀！這次換我請客 ☕', at: now - 1.8 * 24 * H }] }),
+    B({ type: 'note', author: 'her', createdAt: now - 5 * 24 * H, text: '謝謝你昨天冒雨來接我下班，雨好大，但心很暖。', color: NOTE_COLORS[3], mood: '感動' }),
+    B({ type: 'proposal', author: 'me', createdAt: now - 6 * 24 * H, title: '陶藝課第二堂：上釉', date: addDaysIso(12), time: '14:00', place: { name: '華山1914文創園區', addr: '台北市中正區八德路一段1號', lat: 25.0441, lng: 121.5292 }, text: '上次捏的杯子要上色了！', status: 'yes', rsvpBy: 'her', rsvpAt: now - 5.5 * 24 * H }),
+    B({ type: 'proposal', author: 'me', createdAt: now - 30 * 24 * H, title: '河濱騎腳踏車看夕陽', date: addDaysIso(-9), time: '16:30', place: { name: '大稻埕碼頭', addr: '台北市大同區民生西路底', lat: 25.0563, lng: 121.5085 }, text: '', status: 'yes', rsvpBy: 'her', rsvpAt: now - 29 * 24 * H }),
+    B({ type: 'todo', author: 'me', createdAt: now - 3 * 24 * H, title: '預訂週末露營的營位', date: addDaysIso(6) }),
+    B({ type: 'todo', author: 'her', createdAt: now - 4 * 24 * H, title: '把九份的照片整理成小相簿' }),
+    B({ type: 'todo', author: 'her', createdAt: now - 9 * 24 * H, title: '買新的情侶馬克杯', done: true, doneAt: addDaysIso(-2), doneBy: 'me' }),
+    B({ type: 'quest', author: 'me', createdAt: now - 60 * 24 * H, title: '一起包一次水餃', qcat: '一起做菜', done: true, doneAt: '2026-03-02', doneBy: 'her' }),
+    B({ type: 'quest', author: 'her', createdAt: now - 58 * 24 * H, title: '在家連看完整套哈利波特', qcat: '看電影' }),
+    B({ type: 'quest', author: 'me', createdAt: now - 50 * 24 * H, title: '在陽明山看一次滿天星空', qcat: '看夜景' }),
+    B({ type: 'quest', author: 'her', createdAt: now - 45 * 24 * H, title: '去北海道看雪', qcat: '旅行' }),
+    B({ type: 'quest', author: 'me', createdAt: now - 40 * 24 * H, title: '一起學一支雙人舞', qcat: '體驗' }),
+    B({ type: 'quest', author: 'her', createdAt: now - 80 * 24 * H, title: '連續 30 天互道晚安', qcat: '挑戰', done: true, doneAt: '2026-01-15', doneBy: 'me' }),
+    B({ type: 'quest', author: 'me', createdAt: now - 90 * 24 * H, title: '雨天去九份喝茶看山城', qcat: '看夜景', done: true, doneAt: '2025-10-08', doneBy: 'me' }),
+    B({ type: 'quest', author: 'her', createdAt: now - 30 * 24 * H, title: '騎機車環島一圈', qcat: '旅行' }),
+  ];
+}
+
+const BoardStore = {
+  load() {
+    try { const s = JSON.parse(localStorage.getItem(BOARD_LS)); if (Array.isArray(s)) return s; } catch (e) {}
+    const s = boardSeed(); this.save(s); return s;
+  },
+  save(list) { try { localStorage.setItem(BOARD_LS, JSON.stringify(list)); } catch (e) {} },
+  seen(who) { return +localStorage.getItem('us-board-seen-' + who) || 0; },
+  setSeen(who, t) { localStorage.setItem('us-board-seen-' + who, String(t)); },
+  reset() { localStorage.removeItem(BOARD_LS); return this.load(); },
+};
+
+function isUnread(it, who, seen) {
+  if (seen == null) return false;
+  if (it.author !== who && it.createdAt > seen) return true;
+  if ((it.replies || []).some(r => r.author !== who && r.at > seen)) return true;
+  if (it.rsvpBy && it.rsvpBy !== who && it.rsvpAt > seen) return true;
+  return false;
+}
+function upcomingOf(list) {
+  return list.filter(it => it.date && !it.done && !it.memorized && it.status !== 'no')
+    .map(it => ({ it, n: daysUntil(it.date) })).filter(x => x.n >= 0 && x.n <= 7).sort((a, b) => a.n - b.n);
+}
+
+function Who({ a, settings, sm }) {
+  return <span className="who-chip" style={{ background: a === 'her' ? 'var(--her)' : 'var(--me)', fontSize: sm ? 10.5 : 11.5 }}>{settings[a]}</span>;
+}
+function DueChip({ date, time, done }) {
+  if (!date) return null;
+  const n = daysUntil(date); const soon = !done && n >= 0 && n <= 7; const over = !done && n < 0;
+  return (
+    <span className={'due-chip' + (soon ? ' soon' : '') + (over ? ' over' : '')}>
+      <Ms n={soon ? 'notifications' : 'event'} s={13} f={soon} />{fmt(date).md}{time ? ' ' + time : ''}{soon || over ? `・${dueText(n)}` : ''}
+    </span>
+  );
+}
+function DateBlock({ date, big }) {
+  if (!date) return <div className="date-block empty" style={big ? { width: 84 } : {}}><Ms n="event" s={22} /><span>日期未定</span></div>;
+  const f = fmt(date);
+  return (
+    <div className="date-block" style={big ? { width: 84 } : {}}>
+      <div className="db-m">{f.m} 月</div>
+      <div className="db-d hand" style={big ? { fontSize: 42 } : {}}>{f.d}</div>
+      <div className="db-w">週{f.wk}</div>
+    </div>
+  );
+}
+const NewTag = () => <span className="new-tag">NEW</span>;
+const stop = (fn) => (e) => { e.stopPropagation(); fn(e); };
+
+function Rsvp({ it, who, settings, onRsvp, onMemorize }) {
+  const partner = partnerOf(who);
+  const past = it.date && daysUntil(it.date) < 0;
+  if (it.memorized) return <span className="st-chip"><Ms n="auto_stories" s={15} />已收進回憶</span>;
+  if (it.status === 'yes' && past) return <button className="btn primary sm" style={{ boxShadow: 'none' }} onClick={stop(() => onMemorize(it))}><Ms n="edit_note" s={17} />約會完成，寫成回憶</button>;
+  if (it.status === 'yes') return <span className="stamp"><Ms n="favorite" s={15} f />約好了</span>;
+  if (it.author !== who) {
+    return (
+      <div className="rsvp" onClick={(e) => e.stopPropagation()}>
+        {[['yes', 'favorite', '好呀！'], ['maybe', 'help', '再想想'], ['no', 'schedule', '改天吧']].map(([k, ic, l]) => (
+          <button key={k} className={(it.status === k ? 'on ' : '') + k} onClick={() => onRsvp(it.id, k)}><Ms n={ic} s={15} f={it.status === k} />{l}</button>
+        ))}
+      </div>
+    );
+  }
+  if (it.status === 'maybe') return <span className="st-chip"><Ms n="help" s={15} />{settings[partner]} 說再想想</span>;
+  if (it.status === 'no') return <span className="st-chip"><Ms n="schedule" s={15} />{settings[partner]} 說改天吧</span>;
+  return <span className="st-chip"><Ms n="hourglass_top" s={15} />等 {settings[partner]} 回覆中⋯</span>;
+}
+
+function BSection({ icon, color, title, count, extra, onAdd, children, style }) {
+  return (
+    <section style={{ marginBottom: 30, ...style }}>
+      <div className="bsec-head">
+        <span className="bsec-ic" style={{ background: color }}><Ms n={icon} s={18} f /></span>
+        <h2>{title}</h2>{count != null && <span className="muted" style={{ fontSize: 13 }}>{count}</span>}
+        <div style={{ flex: 1 }} />{extra}
+        {onAdd && <button className="btn ghost sm" onClick={onAdd}><Ms n="add" s={16} />新增</button>}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function QuickAdd({ placeholder, onAdd }) {
+  const [v, setV] = React.useState('');
+  return (
+    <form className="quick-add" onSubmit={(e) => { e.preventDefault(); if (v.trim()) { onAdd(v.trim()); setV(''); } }}>
+      <Ms n="add" s={18} />
+      <input value={v} onChange={(e) => setV(e.target.value)} placeholder={placeholder} />
+      {v && <button type="submit" className="btn primary sm" style={{ height: 28, boxShadow: 'none' }}>加入</button>}
+    </form>
+  );
+}
+
+function UpcomingStrip({ list, onOpen }) {
+  const up = upcomingOf(list);
+  if (!up.length) return null;
+  return (
+    <div className="upcoming fade-in">
+      <Tape color="var(--rose)" style={{ top: -8, left: 22, width: 48, height: 14, transform: 'rotate(-6deg)' }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 700, fontSize: 14.5, marginBottom: 8 }}>
+        <Ms n="notifications" s={18} f style={{ color: '#A97B2C' }} />接下來 7 天
+        <span className="muted" style={{ fontWeight: 400, fontSize: 12 }}>・小鈴鐺只在這裡和選單上輕輕提醒</span>
+      </div>
+      <ScrollChips gap={8}>
+        {up.map(({ it, n }) => (
+          <button key={it.id} className="up-item" onClick={() => onOpen(it)}>
+            <Ms n={BTYPES[it.type].icon} s={16} f style={{ color: BTYPES[it.type].c }} />
+            <span className="ellipsis" style={{ maxWidth: 190 }}>{it.title || it.text}</span>
+            <b>{dueText(n)}</b>
+          </button>
+        ))}
+      </ScrollChips>
+    </div>
+  );
+}
+
+function StickyNote({ it, settings, isNew, onOpen }) {
+  const rot = ((it.id.charCodeAt(0) + it.id.charCodeAt(2)) % 5 - 2) * 0.9;
+  const mood = MOOD_MAP[it.mood];
+  const tapes = ['var(--accent)', 'var(--rose)', 'var(--sky)', 'var(--honey)'];
+  return (
+    <button className="sticky fade-in" onClick={() => onOpen(it)} style={{ background: it.color || NOTE_COLORS[0], transform: `rotate(${rot}deg)` }}>
+      <Tape color={tapes[it.id.charCodeAt(1) % 4]} style={{ top: -8, left: '50%', marginLeft: -28, width: 56, height: 16, transform: `rotate(${-rot * 2}deg)` }} />
+      {isNew && <span style={{ position: 'absolute', top: 8, right: 8 }}><NewTag /></span>}
+      <div className="sticky-text">{it.text}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: 'rgba(75,58,47,.65)' }}>
+        {mood && <Ms n={mood[1]} s={17} f style={{ color: mood[2] }} />}
+        <Who a={it.author} settings={settings} sm />
+        <span>{agoText(it.createdAt)}</span>
+        <span style={{ flex: 1 }} />
+        {it.replies && it.replies.length > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }}><Ms n="chat_bubble" s={13} f />{it.replies.length}</span>}
+      </div>
+    </button>
+  );
+}
+
+function ProposalCard({ it, who, settings, isNew, onOpen, onRsvp, onMemorize }) {
+  const n = it.date ? daysUntil(it.date) : null;
+  const faded = it.status === 'no' || (n != null && n < 0 && it.status !== 'yes');
+  return (
+    <div className="card fade-in proposal" onClick={() => onOpen(it)} style={{ opacity: faded ? .65 : 1 }}>
+      <DateBlock date={it.date} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
+          <Who a={it.author} settings={settings} sm /><span className="muted" style={{ fontSize: 11.5 }}>的提議・{agoText(it.createdAt)}</span>
+          {isNew && <NewTag />}
+          <span style={{ flex: 1 }} />
+          {n != null && n >= 0 && it.status !== 'no' && !it.memorized && <DueChip date={it.date} time={it.time} />}
+        </div>
+        <div style={{ fontWeight: 700, fontSize: 16.5, lineHeight: 1.35, marginBottom: 4, textWrap: 'pretty' }}>{it.title}</div>
+        <div className="muted" style={{ fontSize: 12.5, display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: it.text ? 4 : 8 }}>
+          {it.time && <span><Ms n="schedule" s={14} /> {it.time}</span>}
+          {it.place && <span><Ms n="location_on" s={14} /> {it.place.name}</span>}
+          {it.replies && it.replies.length > 0 && <span><Ms n="chat_bubble" s={13} /> {it.replies.length}</span>}
+        </div>
+        {it.text && <div style={{ fontSize: 13.5, lineHeight: 1.55, marginBottom: 8, color: 'var(--ink)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{it.text}</div>}
+        <Rsvp it={it} who={who} settings={settings} onRsvp={onRsvp} onMemorize={onMemorize} />
+      </div>
+    </div>
+  );
+}
+
+function TodoRow({ it, settings, isNew, onOpen, onToggle }) {
+  return (
+    <div className="todo-row">
+      <button className={'check' + (it.done ? ' on' : '')} onClick={() => onToggle(it)} aria-label="完成">{it.done && <Ms n="check" s={16} />}</button>
+      <button style={{ flex: 1, minWidth: 0, textAlign: 'left' }} onClick={() => onOpen(it)}>
+        <div style={{ fontSize: 14.5, lineHeight: 1.45, textDecoration: it.done ? 'line-through' : 'none', color: it.done ? 'var(--faint)' : 'var(--ink)' }}>{it.title} {isNew && <NewTag />}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, flexWrap: 'wrap' }}>
+          <Who a={it.author} settings={settings} sm />
+          <DueChip date={it.date} done={it.done} />
+          {it.done && it.doneAt && <span className="muted" style={{ fontSize: 11.5 }}>{fmt(it.doneAt).md} 完成</span>}
+          {it.replies && it.replies.length > 0 && <span className="muted" style={{ fontSize: 11.5 }}><Ms n="chat_bubble" s={12} /> {it.replies.length}</span>}
+        </div>
+      </button>
+    </div>
+  );
+}
+
+function QuestTile({ it, isNew, onOpen, onToggle }) {
+  return (
+    <div className={'quest fade-in' + (it.done ? ' done' : '')} onClick={() => onOpen(it)}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span className="quest-ic"><Ms n={QUEST_CATS[it.qcat] || 'favorite'} s={18} f /></span>
+        <span className="muted" style={{ fontSize: 11.5 }}>{it.qcat}</span>
+        <span style={{ flex: 1 }} />
+        <button className={'check' + (it.done ? ' on' : '')} onClick={stop(() => onToggle(it))} aria-label="完成">{it.done && <Ms n="check" s={16} />}</button>
+      </div>
+      <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.4, paddingRight: it.done ? 40 : 0, textWrap: 'pretty' }}>{it.title} {isNew && <NewTag />}</div>
+      {!it.done && it.date && <div><DueChip date={it.date} /></div>}
+      {it.done && <span className="quest-stamp">達成 {it.doneAt ? fmt(it.doneAt).md : ''}</span>}
+    </div>
+  );
+}
+
+function BoardDetail({ it, who, settings, onClose, onEdit, onDelete, onToggle, onRsvp, onReply, onMemorize }) {
+  const [txt, setTxt] = React.useState('');
+  const endRef = React.useRef(null);
+  React.useEffect(() => { if (endRef.current && endRef.current.parentNode) { const sc = endRef.current.closest('.scroll'); if (sc) sc.scrollTop = sc.scrollHeight; } }, [it.replies && it.replies.length]);
+  const send = () => { if (!txt.trim()) return; onReply(it.id, txt.trim()); setTxt(''); };
+  const T = BTYPES[it.type];
+  const mood = MOOD_MAP[it.mood];
+  const canMemo = !it.memorized && ((it.type === 'quest' && it.done) || (it.type === 'proposal' && it.status === 'yes' && it.date && daysUntil(it.date) < 0));
+  return (
+    <Sheet title={T.l} onClose={onClose}
+      headExtra={<div style={{ display: 'flex', gap: 6 }}>
+        <button className="btn danger sm" onClick={() => { if (confirm('確定要刪除嗎？')) onDelete(it.id); }}><Ms n="delete" s={18} /></button>
+        <button className="btn ghost sm" onClick={() => onEdit(it)}><Ms n="edit" s={17} />編輯</button>
+      </div>}
+      foot={<form style={{ display: 'flex', gap: 8, flex: 1 }} onSubmit={(e) => { e.preventDefault(); send(); }}>
+        <span style={{ alignSelf: 'center' }}><Who a={who} settings={settings} /></span>
+        <input className="field" value={txt} onChange={(e) => setTxt(e.target.value)} placeholder={`回覆 ${settings[partnerOf(who)]}⋯`} style={{ flex: 1 }} />
+        <button type="submit" className="btn primary" style={{ padding: '0 14px' }}><Ms n="send" s={18} f /></button>
+      </form>}>
+      <div style={{ padding: 18 }}>
+        {it.type === 'note' && (
+          <div style={{ position: 'relative', background: it.color, padding: '26px 20px 18px', borderRadius: '2px 2px 18px 2px', boxShadow: '0 8px 18px rgba(75,58,47,.12)', marginBottom: 18 }}>
+            <Tape color="var(--accent)" style={{ top: -8, left: '50%', marginLeft: -32 }} />
+            <div style={{ fontSize: 18, lineHeight: 1.7, whiteSpace: 'pre-wrap', textWrap: 'pretty' }}>{it.text}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 14, fontSize: 12.5, color: 'rgba(75,58,47,.7)' }}>
+              {mood && <><Ms n={mood[1]} s={20} f style={{ color: mood[2] }} />{mood[0]}</>}
+              <span style={{ flex: 1 }} /><Who a={it.author} settings={settings} /><span>{agoText(it.createdAt)}</span>
+            </div>
+          </div>
+        )}
+        {it.type === 'proposal' && (
+          <div style={{ display: 'flex', gap: 16, marginBottom: 18 }}>
+            <DateBlock date={it.date} big />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><Who a={it.author} settings={settings} /><span className="muted" style={{ fontSize: 12.5 }}>的約會提議・{agoText(it.createdAt)}</span></div>
+              <h2 style={{ margin: '0 0 8px', fontSize: 22, lineHeight: 1.3 }}>{it.title}</h2>
+              <div className="muted" style={{ fontSize: 13.5, display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 10 }}>
+                {it.date && <span><Ms n="event" s={16} /> {fmt(it.date).full}（週{fmt(it.date).wk}）{it.time} {daysUntil(it.date) >= 0 ? `・${dueText(daysUntil(it.date))}` : ''}</span>}
+                {it.place && <span><Ms n="location_on" s={16} /> {it.place.name}{it.place.addr ? `・${it.place.addr}` : ''}</span>}
+              </div>
+              {it.text && <div style={{ fontSize: 15, lineHeight: 1.65, marginBottom: 12, whiteSpace: 'pre-wrap' }}>{it.text}</div>}
+              <Rsvp it={it} who={who} settings={settings} onRsvp={onRsvp} onMemorize={onMemorize} />
+            </div>
+          </div>
+        )}
+        {(it.type === 'todo' || it.type === 'quest') && (
+          <div style={{ marginBottom: 18 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+              {it.type === 'quest' && <span className="quest-ic"><Ms n={QUEST_CATS[it.qcat] || 'favorite'} s={18} f /></span>}
+              {it.type === 'quest' && <span className="muted" style={{ fontSize: 13 }}>{it.qcat}・</span>}
+              <Who a={it.author} settings={settings} /><span className="muted" style={{ fontSize: 12.5 }}>新增於 {agoText(it.createdAt)}</span>
+            </div>
+            <h2 style={{ margin: '0 0 10px', fontSize: 22, lineHeight: 1.35, textDecoration: it.done && it.type === 'todo' ? 'line-through' : 'none' }}>{it.title}</h2>
+            {it.text && <div style={{ fontSize: 15, lineHeight: 1.65, marginBottom: 10, whiteSpace: 'pre-wrap' }}>{it.text}</div>}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button className={'btn ' + (it.done ? 'ghost' : 'primary')} onClick={() => onToggle(it)} style={{ boxShadow: 'none' }}>
+                <Ms n={it.done ? 'undo' : 'task_alt'} s={18} />{it.done ? '取消完成' : (it.type === 'quest' ? '我們完成了！' : '標記完成')}
+              </button>
+              <DueChip date={it.date} done={it.done} />
+              {it.done && it.doneAt && <span className="muted" style={{ fontSize: 12.5 }}>{fmt(it.doneAt).full} 由 {settings[it.doneBy] || ''} 勾選完成</span>}
+            </div>
+          </div>
+        )}
+        {canMemo && <button className="btn ghost" style={{ width: '100%', marginBottom: 16 }} onClick={() => onMemorize(it)}><Ms n="auto_stories" s={18} />寫成一段回憶，收進「我們一起走過的⋯」</button>}
+
+        <div className="dashed" style={{ paddingTop: 14 }}>
+          <div className="label" style={{ marginBottom: 10 }}><Ms n="forum" s={16} />兩個人的悄悄話 {it.replies && it.replies.length ? `（${it.replies.length}）` : ''}</div>
+          {(!it.replies || !it.replies.length) && <div className="muted" style={{ fontSize: 13.5, padding: '6px 0 4px' }}>還沒有留言，在下面寫點什麼吧。</div>}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {(it.replies || []).map(r => (
+              <div key={r.id} style={{ display: 'flex', flexDirection: 'column', alignItems: r.author === who ? 'flex-end' : 'flex-start', gap: 3 }}>
+                <div className={'bubble ' + (r.author === who ? 'mine' : 'theirs')}>{r.text}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'var(--faint)' }}><Who a={r.author} settings={settings} sm />{agoText(r.at)}</div>
+              </div>
+            ))}
+            <div ref={endRef} />
+          </div>
+        </div>
+      </div>
+    </Sheet>
+  );
+}
+
+function BoardEditor({ initial, presetType, who, settings, onSave, onClose }) {
+  const isEdit = !!(initial && initial.id);
+  const toast = useToast();
+  const [it, setIt] = React.useState(() => initial ? { ...initial } : {
+    type: presetType || 'note', title: '', text: '', color: NOTE_COLORS[(Math.random() * NOTE_COLORS.length) | 0], mood: '開心',
+    date: presetType === 'proposal' ? addDaysIso(7) : '', time: presetType === 'proposal' ? '18:00' : '', place: null, qcat: '一起做菜',
+  });
+  const [hasDate, setHasDate] = React.useState(() => !!(initial ? initial.date : presetType === 'proposal'));
+  const [searchOpen, setSearchOpen] = React.useState(false);
+  const set = (k, v) => setIt(o => ({ ...o, [k]: v }));
+  const t = it.type;
+  const partner = settings[partnerOf(who)];
+  const setType = (k) => { setIt(o => ({ ...o, type: k, time: k === 'proposal' && !o.time ? '18:00' : o.time })); if (k === 'proposal' && !hasDate) { setHasDate(true); setIt(o => ({ ...o, date: o.date || addDaysIso(7) })); } };
+  const save = () => {
+    const ok = t === 'note' ? it.text.trim() : it.title.trim();
+    if (!ok) { toast(t === 'note' ? '先寫點什麼吧' : '幫它取個標題吧', 'edit'); return; }
+    onSave({ ...it, date: hasDate ? it.date : '', time: hasDate && t === 'proposal' ? it.time : '' });
+  };
+  const sec = { padding: '16px 16px 4px' };
+  return (
+    <Sheet title={isEdit ? `編輯${BTYPES[t].l}` : '寫進約會聯絡簿'} onClose={onClose}
+      foot={<><button className="btn ghost" style={{ flex: 1 }} onClick={onClose}>取消</button><button className="btn primary" style={{ flex: 2 }} onClick={save}><Ms n="send" s={18} f />{isEdit ? '儲存修改' : `放進聯絡簿，告訴${partner}`}</button></>}>
+      {!isEdit && (
+        <div style={{ padding: '14px 16px 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
+          {Object.entries(BTYPES).map(([k, T]) => (
+            <button key={k} onClick={() => setType(k)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '10px 2px', borderRadius: 10, fontSize: 13, fontWeight: 700,
+              background: t === k ? 'var(--surface)' : 'transparent', border: `1.5px solid ${t === k ? T.c : 'var(--line)'}`, color: t === k ? 'var(--ink)' : 'var(--sub)', boxShadow: t === k ? '0 4px 10px rgba(75,58,47,.08)' : 'none' }}>
+              <span style={{ width: 34, height: 34, borderRadius: 10, background: t === k ? T.c : 'var(--bg2)', color: t === k ? '#fff' : 'var(--sub)', display: 'grid', placeItems: 'center' }}><Ms n={T.icon} s={20} f /></span>{T.l}
+            </button>
+          ))}
+        </div>
+      )}
+      {!isEdit && <div className="muted" style={{ padding: '8px 16px 0', fontSize: 12.5 }}>{BTYPES[t].hint}</div>}
+
+      {t === 'note' ? (
+        <>
+          <div style={sec}>
+            <div className="label"><Ms n="edit" s={16} />想說的話</div>
+            <textarea className="field" rows={4} value={it.text} onChange={(e) => set('text', e.target.value)} placeholder={`想對${partner}說的話、今天的心情⋯`} style={{ background: it.color, borderColor: 'transparent', fontSize: 16 }} />
+          </div>
+          <div style={sec}>
+            <div className="label"><Ms n="palette" s={16} />便利貼顏色</div>
+            <div style={{ display: 'flex', gap: 10 }}>{NOTE_COLORS.map(c => <button key={c} onClick={() => set('color', c)} style={{ width: 36, height: 36, borderRadius: 8, background: c, border: it.color === c ? '2.5px solid var(--ink)' : '1px solid var(--line)', transform: it.color === c ? 'rotate(-6deg)' : 'none', transition: 'transform .2s' }} />)}</div>
+          </div>
+          <div style={{ ...sec, paddingBottom: 20 }}>
+            <div className="label"><Ms n="mood" s={16} />現在的心情</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 6 }}>
+              {MOODS.map(([l, ic, c]) => (
+                <button key={l} onClick={() => set('mood', l)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: '7px 0', borderRadius: 10, fontSize: 11.5, background: it.mood === l ? c + '2E' : 'var(--surface)', border: `1.5px solid ${it.mood === l ? c : 'var(--line)'}` }}>
+                  <Ms n={ic} s={22} f style={{ color: c }} />{l}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div style={sec}>
+            <div className="label"><Ms n="edit" s={16} />{t === 'proposal' ? '想去哪、做什麼' : t === 'quest' ? '想一起完成的事' : '要做的事'}</div>
+            <input className="field" value={it.title} onChange={(e) => set('title', e.target.value)} placeholder={t === 'proposal' ? '例如：週末去象山看夜景' : t === 'quest' ? '例如：一起看一次日出' : '例如：訂餐廳、買禮物'} />
+          </div>
+          {t === 'quest' && (
+            <div style={sec}>
+              <div className="label"><Ms n="sell" s={16} />任務類型</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {Object.entries(QUEST_CATS).map(([k, ic]) => (
+                  <button key={k} className={'chip' + (it.qcat === k ? ' on' : '')} style={it.qcat === k ? { background: 'var(--sky)' } : {}} onClick={() => set('qcat', k)}><Ms n={ic} s={16} f />{k}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          {t === 'proposal' && (
+            <div style={sec}>
+              <div className="label"><Ms n="location_on" s={16} />地點（可選）</div>
+              {it.place ? (
+                <div className="card" style={{ padding: '8px 10px', boxShadow: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Ms n="location_on" s={20} f style={{ color: 'var(--terra)' }} />
+                  <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 700 }}>{it.place.name}</div>{it.place.addr && <div className="muted ellipsis" style={{ fontSize: 12 }}>{it.place.addr}</div>}</div>
+                  <button className="btn ghost sm" onClick={() => set('place', null)}>移除</button>
+                </div>
+              ) : searchOpen ? (
+                <PlaceSearch compact autoFocus onSelect={(p) => { set('place', p); setSearchOpen(false); }} />
+              ) : (
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input className="field" placeholder="直接輸入地點名稱" onBlur={(e) => e.target.value.trim() && set('place', { name: e.target.value.trim() })} onKeyDown={(e) => { if (e.key === 'Enter' && e.target.value.trim()) set('place', { name: e.target.value.trim() }); }} />
+                  <button className="btn ghost" onClick={() => setSearchOpen(true)}><Ms n="search" s={18} />搜尋地圖</button>
+                </div>
+              )}
+            </div>
+          )}
+          <div style={sec}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14.5, cursor: 'pointer' }}>
+              <input type="checkbox" checked={hasDate} onChange={(e) => { setHasDate(e.target.checked); if (e.target.checked && !it.date) set('date', addDaysIso(t === 'proposal' ? 7 : 3)); }} style={{ width: 18, height: 18, accentColor: 'var(--accent)' }} />
+              設定{t === 'proposal' ? '約會' : t === 'quest' ? '目標' : '待辦'}日期
+            </label>
+            {hasDate && (
+              <div style={{ display: 'grid', gridTemplateColumns: t === 'proposal' ? '1fr 1fr' : '1fr', gap: 10, marginTop: 10 }}>
+                <input type="date" className="field" value={it.date} onChange={(e) => set('date', e.target.value)} />
+                {t === 'proposal' && <input type="time" className="field" value={it.time} onChange={(e) => set('time', e.target.value)} />}
+              </div>
+            )}
+            <div className="muted" style={{ fontSize: 12, marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}><Ms n="notifications" s={14} />日期前一週起，聯絡簿圖示會掛上小鈴鐺輕輕提醒，不會跳出打擾。</div>
+          </div>
+          <div style={{ ...sec, paddingBottom: 20 }}>
+            <div className="label"><Ms n="notes" s={16} />{t === 'proposal' ? `想跟${partner}說的` : '補充說明（可選）'}</div>
+            <textarea className="field" rows={3} value={it.text} onChange={(e) => set('text', e.target.value)} placeholder={t === 'proposal' ? '例如：穿好走的鞋，我帶熱可可！' : ''} />
+          </div>
+        </>
+      )}
+    </Sheet>
+  );
+}
+
+function BoardView({ board, setBoard, settings, setSettings, who, setWho, entrySeen, compose, onMemorize }) {
+  const desk = useIsDesk();
+  const toast = useToast();
+  const [filter, setFilter] = React.useState('all');
+  const [openId, setOpenId] = React.useState(null);
+  const [editing, setEditing] = React.useState(null);
+  const [menu, setMenu] = React.useState(false);
+  const partner = partnerOf(who);
+  const whisperOn = settings.whisper !== false;
+
+  React.useEffect(() => { if (compose) { setEditing({ type: compose.type }); } }, [compose && compose.k]);
+
+  const now = () => Date.now();
+  const upd = (id, patch) => setBoard(list => list.map(x => x.id === id ? { ...x, ...patch, updatedAt: now() } : x));
+  const add = (o) => { const n = { id: Store.uid(), replies: [], done: false, text: '', title: '', date: '', time: '', ...o, author: who, createdAt: now() }; if (n.type === 'proposal') n.status = 'pending'; setBoard(list => [n, ...list]); return n; };
+  const onToggle = (it) => {
+    const done = !it.done;
+    upd(it.id, { done, doneAt: done ? todayIso() : null, doneBy: done ? who : null });
+    if (done) toast(it.type === 'quest' ? '戀愛任務達成！又一起完成了一件事' : '完成一件事了', it.type === 'quest' ? 'stars' : 'task_alt');
+  };
+  const onRsvp = (id, status) => {
+    upd(id, { status, rsvpBy: who, rsvpAt: now() });
+    toast(status === 'yes' ? `約好了！${settings[partner]} 會看到你的回覆` : status === 'maybe' ? '已回覆：再想想' : '已回覆：改天吧', status === 'yes' ? 'favorite' : 'chat');
+  };
+  const onReply = (id, text) => setBoard(list => list.map(x => x.id === id ? { ...x, replies: [...(x.replies || []), { id: Store.uid(), author: who, text, at: now() }] } : x));
+  const onDelete = (id) => { setBoard(list => list.filter(x => x.id !== id)); setOpenId(null); toast('已刪除', 'delete'); };
+  const onSave = (it) => {
+    if (it.id) { upd(it.id, it); toast('已更新', 'edit'); setEditing(null); setOpenId(it.id); }
+    else { const n = add(it); setEditing(null); toast(`已放進聯絡簿，${settings[partner]} 下次進來會看到`, 'send'); if (n.type !== 'note') setOpenId(null); }
+  };
+  const open = (it) => setOpenId(it.id);
+  const isNew = (it) => isUnread(it, who, entrySeen);
+
+  const notes = board.filter(x => x.type === 'note').sort((a, b) => b.createdAt - a.createdAt);
+  const proposals = board.filter(x => x.type === 'proposal').sort((a, b) => {
+    const ka = a.memorized || (a.date && daysUntil(a.date) < 0) ? 2 : !a.date ? 1 : 0, kb = b.memorized || (b.date && daysUntil(b.date) < 0) ? 2 : !b.date ? 1 : 0;
+    if (ka !== kb) return ka - kb; if (ka === 2) return (b.date || '').localeCompare(a.date || ''); return (a.date || '').localeCompare(b.date || '') || b.createdAt - a.createdAt;
+  });
+  const todos = board.filter(x => x.type === 'todo').sort((a, b) => (a.done - b.done) || (a.done ? (b.doneAt || '').localeCompare(a.doneAt || '') : ((a.date || '9999').localeCompare(b.date || '9999') || b.createdAt - a.createdAt)));
+  const quests = board.filter(x => x.type === 'quest').sort((a, b) => (a.done - b.done) || (a.done ? (b.doneAt || '').localeCompare(a.doneAt || '') : b.createdAt - a.createdAt));
+  const qDone = quests.filter(q => q.done).length;
+  const openIt = board.find(x => x.id === openId);
+
+  const S = {
+    proposal: (
+      <BSection key="p" icon="local_activity" color="var(--her)" title="約會提議" count={proposals.filter(p => !p.memorized && !(p.date && daysUntil(p.date) < 0)).length + ' 個待約'} onAdd={() => setEditing({ type: 'proposal' })}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {proposals.map(it => <ProposalCard key={it.id} it={it} who={who} settings={settings} isNew={isNew(it)} onOpen={open} onRsvp={onRsvp} onMemorize={onMemorize} />)}
+          {!proposals.length && <div className="card muted" style={{ padding: 20, textAlign: 'center', boxShadow: 'none' }}>還沒有提議，邀{settings[partner]}去個地方吧！</div>}
+        </div>
+      </BSection>
+    ),
+    note: (
+      <BSection key="n" icon="sticky_note_2" color="var(--honey)" title="便利貼牆" count={notes.length + ' 張'}>
+        <div className="sticky-wall">
+          <button className="sticky sticky-add" onClick={() => setEditing({ type: 'note' })}><Ms n="add" s={28} />貼一張便利貼給{settings[partner]}</button>
+          {notes.map(it => <StickyNote key={it.id} it={it} settings={settings} isNew={isNew(it)} onOpen={open} />)}
+        </div>
+      </BSection>
+    ),
+    todo: (
+      <BSection key="t" icon="checklist" color="var(--accent)" title="一起的待辦" count={`${todos.filter(t => !t.done).length} 件未完成`} onAdd={() => setEditing({ type: 'todo' })}>
+        <div className="card" style={{ padding: '10px 12px', boxShadow: 'none' }}>
+          <QuickAdd placeholder="快速新增待辦，按 Enter 加入" onAdd={(title) => { add({ type: 'todo', title }); toast('已加入待辦', 'checklist'); }} />
+          {todos.map(it => <TodoRow key={it.id} it={it} settings={settings} isNew={isNew(it)} onOpen={open} onToggle={onToggle} />)}
+          {!todos.length && <div className="muted" style={{ padding: 16, textAlign: 'center', fontSize: 13.5 }}>沒有待辦，好好約會吧！</div>}
+        </div>
+      </BSection>
+    ),
+    quest: (
+      <BSection key="q" icon="stars" color="var(--sky)" title="戀愛任務清單" count={`${qDone} / ${quests.length}`} onAdd={() => setEditing({ type: 'quest' })}>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, color: 'var(--sub)', marginBottom: 5 }}>
+            <span>一起做菜、看電影、看夜景、旅行⋯慢慢完成</span><span><b className="hand" style={{ fontSize: 19, color: 'var(--accent-d)' }}>{quests.length ? Math.round(qDone / quests.length * 100) : 0}%</b></span>
+          </div>
+          <div className="progress"><i style={{ width: `${quests.length ? qDone / quests.length * 100 : 0}%` }} /></div>
+        </div>
+        <div style={{ marginBottom: 10 }}><QuickAdd placeholder="新增一個想一起完成的願望" onAdd={(title) => { add({ type: 'quest', title, qcat: '其他' }); toast('加進戀愛任務了', 'stars'); }} /></div>
+        <div className="quest-grid">{quests.map(it => <QuestTile key={it.id} it={it} isNew={isNew(it)} onOpen={open} onToggle={onToggle} />)}</div>
+      </BSection>
+    ),
+  };
+
+  const counts = { all: board.length, note: notes.length, proposal: proposals.length, todo: todos.length, quest: quests.length };
+
+  return (
+    <div className="scroll paper" style={{ flex: 1, height: '100%' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: desk ? '30px 48px 60px' : '14px 16px 120px' }}>
+        <div style={{ display: 'flex', alignItems: desk ? 'flex-end' : 'flex-start', justifyContent: 'space-between', gap: 14, marginBottom: 18, flexDirection: desk ? 'row' : 'column' }}>
+          <div>
+            <div className="hand" style={{ fontSize: desk ? 26 : 21, color: 'var(--accent-d)', marginBottom: 4 }}>our little notebook</div>
+            <h1 style={{ margin: 0, fontSize: desk ? 42 : 28, lineHeight: 1.15 }}>約會聯絡簿</h1>
+            <div className="muted" style={{ fontSize: 13.5, marginTop: 6 }}>{settings.her} 和 {settings.me} 共用的小本子：留言、約會提議、待辦和戀愛任務都放這裡</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="seg" title="切換目前是誰在使用">
+              <span style={{ fontSize: 12.5, color: 'var(--sub)', padding: '0 6px 0 8px', alignSelf: 'center' }}>我是</span>
+              {['her', 'me'].map(w => <button key={w} className={who === w ? 'on' : ''} style={who === w ? { background: w === 'her' ? 'var(--her)' : 'var(--me)' } : {}} onClick={() => setWho(w)}>{settings[w]}</button>)}
+            </div>
+            <button className="chip" onClick={() => { setSettings({ ...settings, whisper: !whisperOn }); toast(whisperOn ? '已關閉進站小提示（小鈴鐺仍會保留）' : '已開啟進站小提示', whisperOn ? 'notifications_off' : 'notifications'); }}>
+              <Ms n={whisperOn ? 'notifications_active' : 'notifications_off'} s={16} style={{ color: whisperOn ? '#A97B2C' : 'var(--faint)' }} />進站小提示 {whisperOn ? '開' : '關'}
+            </button>
+            <div style={{ position: 'relative' }}>
+              <button className="btn primary" onClick={() => setMenu(v => !v)}><Ms n="edit_square" s={18} />寫一筆</button>
+              {menu && <>
+                <div onClick={() => setMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 700 }} />
+                <div className="card fade-in" style={{ position: 'absolute', right: desk ? 0 : 'auto', left: desk ? 'auto' : 0, top: 50, zIndex: 701, padding: 6, width: 260, boxShadow: 'var(--shadow-l)' }}>
+                  {Object.entries(BTYPES).map(([k, T]) => (
+                    <button key={k} onClick={() => { setMenu(false); setEditing({ type: k }); }} style={{ display: 'flex', gap: 10, alignItems: 'center', padding: 10, width: '100%', textAlign: 'left', borderRadius: 8 }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg)'} onMouseLeave={(e) => e.currentTarget.style.background = ''}>
+                      <span style={{ width: 36, height: 36, borderRadius: 10, background: T.c, color: '#fff', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ms n={T.icon} s={20} f /></span>
+                      <span><span style={{ display: 'block', fontWeight: 700, fontSize: 14.5 }}>{T.l}</span><span className="muted" style={{ fontSize: 12 }}>{T.hint}</span></span>
+                    </button>
+                  ))}
+                </div>
+              </>}
+            </div>
+          </div>
+        </div>
+
+        <ScrollChips style={{ marginBottom: 16 }}>
+          {[['all', '全部', 'apps'], ['proposal', '約會提議', 'local_activity'], ['note', '便利貼', 'sticky_note_2'], ['todo', '待辦', 'checklist'], ['quest', '戀愛任務', 'stars']].map(([k, l, ic]) => (
+            <button key={k} className={'chip' + (filter === k ? ' on' : '')} style={filter === k ? { background: 'var(--ink)' } : {}} onClick={() => setFilter(k)}><Ms n={ic} s={16} f={filter === k} />{l}<span style={{ opacity: .6, fontSize: 12 }}>{counts[k]}</span></button>
+          ))}
+        </ScrollChips>
+
+        {(filter === 'all' || filter === 'proposal' || filter === 'todo' || filter === 'quest') && <UpcomingStrip list={board} onOpen={open} />}
+
+        {filter === 'all' ? (
+          desk ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 390px', gap: 32, alignItems: 'start' }}>
+              <div>{S.proposal}{S.note}</div>
+              <div>{S.todo}{S.quest}</div>
+            </div>
+          ) : <div>{S.proposal}{S.note}{S.todo}{S.quest}</div>
+        ) : S[filter]}
+      </div>
+
+      {openIt && !editing && <BoardDetail it={openIt} who={who} settings={settings} onClose={() => setOpenId(null)} onEdit={(it) => setEditing({ initial: it })}
+        onDelete={onDelete} onToggle={onToggle} onRsvp={onRsvp} onReply={onReply} onMemorize={(it) => { setOpenId(null); onMemorize(it); }} />}
+      {editing && <BoardEditor key={editing.initial ? editing.initial.id : 'new-' + editing.type} initial={editing.initial} presetType={editing.type} who={who} settings={settings} onSave={onSave} onClose={() => setEditing(null)} />}
+    </div>
+  );
+}
+
+function Whisper({ data, settings, who, onGo, onClose }) {
+  const desk = useIsDesk();
+  const [out, setOut] = React.useState(false);
+  const close = () => { setOut(true); setTimeout(onClose, 350); };
+  React.useEffect(() => { const t = setTimeout(close, 8000); return () => clearTimeout(t); }, []);
+  const partner = settings[partnerOf(who)];
+  return ReactDOM.createPortal(
+    <div className={'whisper ' + (desk ? 'desk' : 'mob') + (out ? ' out' : '')} role="status">
+      <span style={{ width: 34, height: 34, borderRadius: 17, background: 'color-mix(in oklab, var(--honey) 25%, var(--surface))', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+        <Ms n="notifications" s={20} f className="bell" style={{ color: '#A97B2C' }} />
+      </span>
+      <button style={{ flex: 1, minWidth: 0, textAlign: 'left' }} onClick={() => { onGo(); close(); }}>
+        {data.un > 0 && <div style={{ fontSize: 14, fontWeight: 700 }}>「{partner}」在聯絡簿留了 {data.un} 則新消息</div>}
+        {data.up && <div style={{ fontSize: data.un > 0 ? 12.5 : 14, color: data.un > 0 ? 'var(--sub)' : 'var(--ink)', fontWeight: data.un > 0 ? 400 : 700 }} className="ellipsis">「{data.up.it.title || data.up.it.text}」{dueText(data.up.n)}{data.upN > 1 ? `，還有其他 ${data.upN - 1} 件` : ''}</div>}
+      </button>
+      <button className="btn ghost sm" style={{ height: 30 }} onClick={() => { onGo(); close(); }}>去看看</button>
+      <button onClick={close} style={{ color: 'var(--faint)', display: 'grid' }} aria-label="關閉"><Ms n="close" s={18} /></button>
+    </div>, document.body);
+}
+
+function SearchView({ records, settings, onOpen }) {
+  const desk = useIsDesk();
+  const [q, setQ] = React.useState('');
+  const [cats, setCats] = React.useState([]);
+  const [from, setFrom] = React.useState('');
+  const [to, setTo] = React.useState('');
+  const [year, setYear] = React.useState(null);
+  const [mode, setMode] = React.useState('all');
+  const [minRate, setMinRate] = React.useState(0);
+  const years = [...new Set(records.map(r => r.date.slice(0, 4)))].sort().reverse();
+  const list = sortRecs(records).filter(r => (!q.trim() || (r.title + (r.place ? r.place.name + r.place.addr : '') + (r.her || '') + (r.me || '') + r.cat).toLowerCase().includes(q.toLowerCase()))
+    && (!cats.length || cats.includes(r.cat)) && (!from || r.date >= from) && (!to || r.date <= to)
+    && (!year || r.date.startsWith(year)) && (mode === 'all' || (mode === 'place' ? r.place : mode === 'life' ? !r.place : recMedia(r).length > 0)) && (r.rating || 0) >= minRate);
+  const toggle = (c) => setCats(cs => cs.includes(c) ? cs.filter(x => x !== c) : [...cs, c]);
+  const clear = () => { setQ(''); setCats([]); setFrom(''); setTo(''); setYear(null); setMode('all'); setMinRate(0); };
+  const quick = [['近 30 天', () => { const d = new Date(); d.setDate(d.getDate() - 30); setFrom(Store.iso(d)); setTo(''); }], ['今年', () => { setFrom(new Date().getFullYear() + '-01-01'); setTo(''); }], ['紀念日們', () => setCats(['紀念日', '生日'])]];
+  const otd = onThisDay(records);
+
+  const filters = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div>
+        <div className="label"><Ms n="search" s={16} />關鍵字（地點、標題、心得）</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, height: 46, padding: '0 12px', background: 'var(--surface)', border: '1px solid var(--line)', borderRadius: 12 }}>
+          <Ms n="search" s={20} style={{ color: 'var(--sub)' }} />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="例如：牛肉麵、淡水、蛋糕…" style={{ border: 0, outline: 0, background: 'none', flex: 1, minWidth: 0, fontSize: 15 }} />
+        </div>
+      </div>
+      <ScrollChips>{quick.map(([l, fn]) => <button key={l} className="chip" onClick={fn}><Ms n="bolt" s={15} style={{ color: 'var(--honey)' }} />{l}</button>)}</ScrollChips>
+      <div>
+        <div className="label"><Ms n="date_range" s={16} />日期範圍</div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><input type="date" className="field" value={from} onChange={(e) => setFrom(e.target.value)} style={{ width: 145 }} /><span className="muted">–</span><input type="date" className="field" value={to} onChange={(e) => setTo(e.target.value)} style={{ width: 145 }} /></div>
+      </div>
+      <div>
+        <div className="label"><Ms n="auto_stories" s={16} />年份回顧</div>
+        <ScrollChips>{years.map(y => <button key={y} className={'chip' + (year === y ? ' on' : '')} style={year === y ? { background: 'var(--ink)' } : {}} onClick={() => setYear(year === y ? null : y)}>{y}</button>)}</ScrollChips>
+      </div>
+      <div>
+        <div className="label"><Ms n="sell" s={16} />分類（可複選）</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{Object.keys(CATS).map(c => <CatChip key={c} cat={c} on={cats.includes(c)} onClick={() => toggle(c)} />)}</div>
+      </div>
+      <div>
+        <div className="label"><Ms n="filter_list" s={16} />類型</div>
+        <div className="seg" style={{ flexWrap: 'wrap' }}>{[['all', '全部'], ['place', '有地點'], ['life', '生活紀錄'], ['media', '有照片影片']].map(([k, l]) => <button key={k} className={mode === k ? 'on' : ''} onClick={() => setMode(k)}>{l}</button>)}</div>
+      </div>
+      <div>
+        <div className="label"><Ms n="favorite" s={16} />喜歡程度至少</div>
+        <Hearts n={minRate} s={24} onChange={(v) => setMinRate(minRate === v ? 0 : v)} />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="scroll paper" style={{ flex: 1, height: '100%' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: desk ? '30px 48px 60px' : '14px 16px 120px' }}>
+        <div className="hand" style={{ fontSize: desk ? 26 : 21, color: 'var(--accent-d)', marginBottom: 4 }}>find our moments</div>
+        <h1 style={{ margin: '0 0 18px', fontSize: desk ? 40 : 28 }}>快速查詢</h1>
+        <div style={{ display: 'grid', gridTemplateColumns: desk ? '340px 1fr' : '1fr', gap: desk ? 32 : 20, alignItems: 'start' }}>
+          <div className="card" style={{ padding: 18, boxShadow: 'none', position: desk ? 'sticky' : 'static', top: 0 }}>{filters}</div>
+          <div>
+            {otd.length > 0 && (
+              <div style={{ marginBottom: 18 }}>
+                <div className="label" style={{ fontWeight: 700, color: 'var(--ink)' }}><Ms n="history" s={18} />那年今天</div>
+                <div style={{ display: 'grid', gridTemplateColumns: desk ? '1fr 1fr' : '1fr', gap: 10 }}>{otd.map(r => <OnThisDay key={r.id} records={[r]} onOpen={onOpen} />)}</div>
+              </div>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 700 }}>找到 <span className="hand" style={{ fontSize: 24, color: 'var(--accent-d)' }}>{list.length}</span> 則回憶</span>
+              <button className="btn ghost sm" onClick={clear}><Ms n="restart_alt" s={16} />清除條件</button>
+            </div>
+            <div className="card" style={{ padding: 6, boxShadow: 'none' }}>
+              {list.map(r => <RecRow key={r.id} r={r} onClick={() => onOpen(r)} settings={settings} />)}
+              {list.length === 0 && <div className="muted" style={{ textAlign: 'center', padding: 40 }}>沒有符合條件的回憶，放寬一點條件試試</div>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UsView({ records, settings, setSettings, onReset }) {
+  const desk = useIsDesk();
+  const days = dayNoOf(Store.iso(new Date()), settings.anniv);
+  const next = (() => { const a = parseD(settings.anniv); const t = new Date(); let n = new Date(t.getFullYear(), a.getMonth(), a.getDate()); if (n < new Date(t.getFullYear(), t.getMonth(), t.getDate())) n = new Date(t.getFullYear() + 1, a.getMonth(), a.getDate()); return { d: Math.round((n - new Date(t.getFullYear(), t.getMonth(), t.getDate())) / 86400000), y: n.getFullYear() - a.getFullYear() }; })();
+  const milestone = Math.ceil((days + 1) / 100) * 100;
+  return (
+    <div className="scroll paper" style={{ flex: 1, height: '100%' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: desk ? '40px 24px 60px' : '20px 16px 120px' }}>
+        <div className="card" style={{ padding: '30px 20px', textAlign: 'center', position: 'relative', marginBottom: 18 }}>
+          <Tape color="var(--accent)" style={{ top: -8, left: '50%', marginLeft: -32, transform: 'rotate(-3deg)' }} />
+          <div className="muted" style={{ fontSize: 14 }}>{settings.her} ♡ {settings.me}，在一起第</div>
+          <div className="hand" style={{ fontSize: 84, fontWeight: 700, lineHeight: 1, color: 'var(--accent-d)', margin: '6px 0' }}>{nf(days)}</div>
+          <div className="muted" style={{ fontSize: 14 }}>天・從 {settings.anniv.replaceAll('-', '.')} 開始</div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
+            <span className="chip"><Ms n="cake" s={16} f style={{ color: 'var(--rose)' }} />{next.d === 0 ? `今天是 ${next.y} 週年！` : `再 ${next.d} 天就是 ${next.y} 週年`}</span>
+            <span className="chip"><Ms n="flag" s={16} f style={{ color: 'var(--honey)' }} />再 {milestone - days} 天就第 {nf(milestone)} 天</span>
+          </div>
+        </div>
+        <div className="card" style={{ padding: 18, boxShadow: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ fontWeight: 700, fontSize: 16 }}>我們的設定</div>
+          <div><div className="label">在一起的紀念日</div><input type="date" className="field" value={settings.anniv} onChange={(e) => e.target.value && setSettings({ ...settings, anniv: e.target.value })} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div><div className="label"><span style={{ width: 10, height: 10, borderRadius: 5, background: 'var(--her)' }} />她的暱稱</div><input className="field" value={settings.her} onChange={(e) => setSettings({ ...settings, her: e.target.value })} /></div>
+            <div><div className="label"><span style={{ width: 10, height: 10, borderRadius: 5, background: 'var(--me)' }} />他的暱稱</div><input className="field" value={settings.me} onChange={(e) => setSettings({ ...settings, me: e.target.value })} /></div>
+          </div>
+          <div className="dashed" style={{ paddingTop: 14 }}>
+            <div className="label">Google Maps API Key（選填，解鎖 Google 店家查詢與評分）</div>
+            <input className="field" type="password" value={settings.googleMapsKey || ''} placeholder="可留空，留空時使用開放圖資" onChange={(e) => setSettings({ ...settings, googleMapsKey: e.target.value })} />
+            <div className="muted" style={{ fontSize: 12, marginTop: 4 }}>輸入後儲存於本機瀏覽器，不會隨代碼公開到 GitHub。若在 Google Cloud 設定了 HTTP Referrer 白名單亦可填入。</div>
+          </div>
+          <div className="dashed" style={{ paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+            <span className="muted" style={{ fontSize: 13 }}>目前 {records.length} 則回憶，資料儲存在這台裝置的瀏覽器中。</span>
+            <button className="btn ghost sm" onClick={onReset}>重置示範資料</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AddMenu({ onPick, onClose, desk }) {
+  const items = [
+    ['place', 'add_location_alt', '在這裡打卡', '定位或搜尋地點，記錄約會足跡'],
+    ['life', 'edit_note', '新增生活紀錄', '不需要地點，記下日常或重要時刻'],
+    ['b:proposal', 'local_activity', '提議下次約會', '寫進約會聯絡簿，邀請對方'],
+    ['b:note', 'sticky_note_2', '貼一張便利貼', '留言、分享此刻的心情']
+  ];
+  const body = (
+    <div className="card fade-in" style={{ padding: 8, width: desk ? 300 : 'auto', boxShadow: 'var(--shadow-l)' }}>
+      {items.map(([k, ic, t, s]) => (
+        <button key={k} onClick={() => onPick(k)} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: 12, width: '100%', textAlign: 'left', borderRadius: 8 }}
+          onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg)'} onMouseLeave={(e) => e.currentTarget.style.background = ''}>
+          <span style={{ width: 44, height: 44, borderRadius: 12, background: { place: 'var(--accent)', life: 'var(--honey)', 'b:proposal': 'var(--her)', 'b:note': 'var(--rose)' }[k], color: '#fff', display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ms n={ic} s={24} f /></span>
+          <span><span style={{ display: 'block', fontWeight: 700, fontSize: 15.5 }}>{t}</span><span className="muted" style={{ fontSize: 12.5 }}>{s}</span></span>
+        </button>
+      ))}
+    </div>
+  );
+  return (
+    <>
+      <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 700, background: desk ? 'transparent' : 'rgba(60,45,35,.25)' }} />
+      <div style={desk ? { position: 'absolute', right: 0, top: 52, zIndex: 701 } : { position: 'fixed', left: 16, right: 16, bottom: 100, zIndex: 701 }}>{body}</div>
+    </>
+  );
+}
+
+function App() {
+  const desk = useIsDesk();
+  const toast = useToast();
+  const [records, setRecords] = React.useState(() => Store.load());
+  const [settings, setSettingsS] = React.useState(() => Store.loadSettings());
+  const [tab, setTabS] = React.useState(() => localStorage.getItem('us-tab') || 'map');
+  const [base, setBase] = React.useState('theme');
+  const [tlLayout, setTlLayout] = React.useState('calendar');
+  const [editing, setEditing] = React.useState(null);
+  const [viewing, setViewing] = React.useState(null);
+  const [mapFocus, setMapFocus] = React.useState(null);
+  const [addMenu, setAddMenu] = React.useState(false);
+  const [board, setBoard] = React.useState(() => BoardStore.load());
+  const [who, setWhoS] = React.useState(() => localStorage.getItem('us-who') || 'me');
+  const [entrySeen, setEntrySeen] = React.useState(null);
+  const [whisper, setWhisper] = React.useState(null);
+  const [compose, setCompose] = React.useState(null);
+  const [memoFrom, setMemoFrom] = React.useState(null);
+  const [, bump] = React.useState(0);
+
+  React.useEffect(() => { BoardStore.save(board); }, [board]);
+  const setWho = (w) => { if (tab === 'board') BoardStore.setSeen(who, Date.now()); setWhoS(w); localStorage.setItem('us-who', w); };
+  React.useEffect(() => {
+    if (tab !== 'board') return;
+    setEntrySeen(BoardStore.seen(who));
+    localStorage.setItem('us-remind-' + who, Store.iso(new Date()));
+    BoardStore.setSeen(who, Date.now());
+    const t = setInterval(() => BoardStore.setSeen(who, Date.now()), 4000);
+    return () => { clearInterval(t); BoardStore.setSeen(who, Date.now()); bump(x => x + 1); };
+  }, [tab, who]);
+  const unreadN = tab === 'board' ? 0 : board.filter(it => isUnread(it, who, BoardStore.seen(who))).length;
+  const upList = upcomingOf(board);
+  const remindAck = localStorage.getItem('us-remind-' + who) === Store.iso(new Date());
+  const showBell = tab !== 'board' && (unreadN > 0 || (upList.length > 0 && !remindAck));
+  React.useEffect(() => {
+    const key = 'us-whisper-' + who;
+    if (settings.whisper === false || sessionStorage.getItem(key) || tab === 'board') return;
+    const un = board.filter(it => isUnread(it, who, BoardStore.seen(who))).length;
+    const up = upList.length && !remindAck ? upList[0] : null;
+    if (!un && !up) return;
+    const t = setTimeout(() => { sessionStorage.setItem(key, '1'); setWhisper({ un, up, upN: upList.length }); }, 3400);
+    return () => clearTimeout(t);
+  }, [who]);
+
+  const memorize = (it) => {
+    const place = it.place && it.place.lat != null ? { name: it.place.name, addr: it.place.addr || '', lat: it.place.lat, lng: it.place.lng } : null;
+    setMemoFrom(it.id);
+    setEditing({ initial: { kind: place ? 'place' : 'life', date: it.date && it.date <= Store.iso(new Date()) ? it.date : (it.doneAt || Store.iso(new Date())), time: it.time || '', title: it.title, cat: it.type === 'quest' ? (QUEST_TO_REC[it.qcat] || '日常') : '日常', place, weather: 'sunny', temp: '', mood: '開心', rating: 5, her: '', me: '', media: [] } });
+  };
+  const bellBadge = <span className="nav-bell"><Ms n="notifications" s={11} f /></span>;
+
+  const setTab = (t) => { setTabS(t); localStorage.setItem('us-tab', t); };
+  const setSettings = (s) => { setSettingsS(s); Store.saveSettings(s); };
+  const commit = (list) => { setRecords(list); Store.save(list); };
+
+  const save = (r) => {
+    if (r.id) { commit(records.map(x => x.id === r.id ? r : x)); toast('已更新這段回憶', 'edit'); setViewing(r.id); }
+    else { const n = { ...r, id: Store.uid(), createdAt: Date.now() }; commit([n, ...records]); if (memoFrom) { setBoard(list => list.map(x => x.id === memoFrom ? { ...x, memorized: n.id, done: x.type === 'quest' ? true : x.done } : x)); setMemoFrom(null); } toast('收進「我們一起走過的…」了', 'favorite'); if (n.place && tab === 'map') setMapFocus({ ...n, k: Date.now() }); else setViewing(n.id); }
+    setEditing(null);
+  };
+  const del = (id) => { const r = records.find(x => x.id === id); (r.media || []).forEach(m => Store.delMedia(m.id)); commit(records.filter(x => x.id !== id)); setEditing(null); setViewing(null); toast('已刪除', 'delete'); };
+  const closeEditor = () => { setEditing(null); setMemoFrom(null); };
+  const openAdd = (preset = {}) => { setAddMenu(false); setEditing(preset); };
+  const viewingRec = records.find(r => r.id === viewing);
+  const onOpen = (r) => setViewing(r.id);
+  const showOnMap = (r) => { setViewing(null); setTab('map'); setTimeout(() => setMapFocus({ ...r, k: Date.now() }), 60); };
+
+  const days = dayNoOf(Store.iso(new Date()), settings.anniv);
+  const tabs = [
+    ['map', '地圖', 'map'],
+    ['timeline', '我們一起走過的…', 'auto_stories'],
+    ['board', '約會聯絡簿', 'menu_book'],
+    ['search', '快速查詢', 'manage_search'],
+    ['us', '我們', 'favorite']
+  ];
+
+  return (
+    <div className="app">
+      {desk && (
+        <header className="topbar">
+          <div className="brand"><span className="hand">us ♡</span>關於妳，關於我，關於我們</div>
+          <nav className="tabs">{tabs.map(([k, l, ic]) => <button key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => setTab(k)} title={k === 'board' && showBell ? (unreadN ? `有 ${unreadN} 則新消息` : '一週內有約會或待辦') : undefined}><span className="nav-ic"><Ms n={ic} s={18} f={tab === k} />{k === 'board' && showBell && bellBadge}</span>{l}</button>)}</nav>
+          <div style={{ flex: 1 }} />
+          <div className="day-badge"><Ms n="favorite" s={14} f style={{ color: 'var(--her)' }} />在一起第<b>{nf(days)}</b>天</div>
+          <div style={{ position: 'relative' }}>
+            <button className="btn primary" onClick={() => setAddMenu(v => !v)}><Ms n="add" s={20} />新增紀錄</button>
+            {addMenu && <AddMenu onPick={(k) => { if (k.startsWith('b:')) { setAddMenu(false); setTab('board'); setCompose({ type: k.slice(2), k: Date.now() }); } else openAdd({ presetKind: k }); }} onClose={() => setAddMenu(false)} desk />}
+          </div>
+        </header>
+      )}
+      <main className="main">
+        {tab === 'map' && <MapView records={records} settings={settings} base={base} setBase={setBase} onOpen={onOpen} onAdd={openAdd} focus={mapFocus} />}
+        {tab === 'timeline' && <TimelineView records={records} settings={settings} onOpen={onOpen} layout={tlLayout} setLayout={setTlLayout} onAdd={() => openAdd({ presetKind: 'life' })} />}
+        {tab === 'board' && <BoardView board={board} setBoard={setBoard} settings={settings} setSettings={setSettings} who={who} setWho={setWho} entrySeen={entrySeen} compose={compose} onMemorize={memorize} />}
+        {tab === 'search' && <SearchView records={records} settings={settings} onOpen={onOpen} />}
+        {tab === 'us' && <UsView records={records} settings={settings} setSettings={setSettings} onReset={() => { if (confirm('重置後會清除你新增的紀錄與聯絡簿，確定嗎？')) { setRecords(Store.reset()); setBoard(BoardStore.reset()); toast('已重置示範資料', 'restart_alt'); } }} />}
+      </main>
+      {!desk && (
+        <nav className="bottomnav">
+          {[tabs[0], tabs[1]].map(([k, l, ic]) => <button key={k} className={'bn' + (tab === k ? ' on' : '')} onClick={() => setTab(k)}><Ms n={ic} s={24} f={tab === k} />{k === 'timeline' ? '足跡' : l}</button>)}
+          <button className="bn-add" onClick={() => setAddMenu(v => !v)}><Ms n="add_location_alt" s={28} f /></button>
+          {[tabs[2], tabs[3], tabs[4]].map(([k, l, ic]) => <button key={k} className={'bn' + (tab === k ? ' on' : '')} onClick={() => setTab(k)}><span className="nav-ic"><Ms n={ic} s={24} f={tab === k} />{k === 'board' && showBell && bellBadge}</span>{k === 'search' ? '查詢' : k === 'board' ? '聯絡簿' : l}</button>)}
+        </nav>
+      )}
+      {!desk && addMenu && <AddMenu onPick={(k) => { if (k.startsWith('b:')) { setAddMenu(false); setTab('board'); setCompose({ type: k.slice(2), k: Date.now() }); } else openAdd({ presetKind: k }); }} onClose={() => setAddMenu(false)} />}
+
+      {viewingRec && !editing && <Detail r={viewingRec} settings={settings} onClose={() => setViewing(null)} onEdit={(r) => setEditing({ initial: r })} onShowMap={showOnMap} />}
+      {editing && <Editor key={editing.initial ? editing.initial.id : 'new'} initial={editing.initial} presetPlace={editing.place} presetKind={editing.presetKind} settings={settings} onSave={save} onDelete={del} onClose={closeEditor} />}
+
+      {whisper && <Whisper data={whisper} settings={settings} who={who} onGo={() => setTab('board')} onClose={() => setWhisper(null)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<ToastHost><App /></ToastHost>);
+</script>
+</body>
+</html>
